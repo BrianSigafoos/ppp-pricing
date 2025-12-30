@@ -8,6 +8,8 @@ const state = {
   search: "",
 };
 
+const USD_CAP_MULTIPLIER = 1.5;
+
 const formatters = {
   rate: new Intl.NumberFormat("en-US", {
     minimumFractionDigits: 0,
@@ -57,22 +59,28 @@ function computeRow(row, usdPrice, usdFloor) {
   const pppScaledRounded = Math.ceil(pppScaledRaw);
   const exchScaled = exchRate * 1000;
   const minPppScaled = Math.ceil((usdFloor * exchScaled) / usdPrice);
+  const capPppScaled = Math.floor(
+    (usdPrice * USD_CAP_MULTIPLIER * exchScaled) / usdPrice,
+  );
   const adjustedPppScaled = Math.max(pppScaledRounded, minPppScaled);
+  const finalPppScaled = Math.min(adjustedPppScaled, capPppScaled);
   const adjustmentPct =
-    pppScaledRounded > 0 ? adjustedPppScaled / pppScaledRounded - 1 : null;
+    pppScaledRounded > 0 ? finalPppScaled / pppScaledRounded - 1 : null;
   const usdEquivRaw = (usdPrice * pppScaledRaw) / exchScaled;
-  const usdEquivAdjusted = (usdPrice * adjustedPppScaled) / exchScaled;
+  const usdEquivAdjusted = (usdPrice * finalPppScaled) / exchScaled;
 
   return {
     ...row,
     isMissing: false,
-    isAdjusted: adjustedPppScaled > pppScaledRounded,
+    isAdjusted: finalPppScaled !== pppScaledRounded,
+    isCapped: finalPppScaled < adjustedPppScaled,
     ppp_scaled_raw: pppScaledRaw,
     ppp_scaled_rounded: pppScaledRounded,
-    adjusted_ppp_scaled: adjustedPppScaled,
+    adjusted_ppp_scaled: finalPppScaled,
     adjustment_pct: adjustmentPct,
     usd_equiv_raw: usdEquivRaw,
     usd_equiv_adjusted: usdEquivAdjusted,
+    cap_ppp_scaled: capPppScaled,
   };
 }
 
@@ -147,6 +155,7 @@ function renderTable(rows, columns) {
   body.innerHTML = rows
     .map((row) => {
       const classes = [
+        row.isCapped ? "is-capped" : "",
         row.isAdjusted ? "is-adjusted" : "",
         row.isMissing ? "is-missing" : "",
       ]
@@ -233,6 +242,7 @@ function buildYaml(rows, usdPrice, usdFloor) {
   const lines = [
     `# Generated ${new Date().toISOString().slice(0, 10)}`,
     `# USD price: ${usdPrice}, USD floor: ${usdFloor}`,
+    `# USD cap multiplier: ${USD_CAP_MULTIPLIER}x`,
   ];
   for (const [code, value] of deduped.entries()) {
     lines.push(`${code}: ${value}`);

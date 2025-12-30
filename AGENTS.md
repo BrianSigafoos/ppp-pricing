@@ -27,3 +27,4 @@ make refresh
 - Keep the site static (no build step). Avoid adding dependencies unless needed.
 - Maintain provenance fields for PPP and exchange rates per currency.
 - Ability to export as YAML: `currency_ppp.yml`.
+- Enforce the 1.5x USD cap when calculating adjusted PPP values.

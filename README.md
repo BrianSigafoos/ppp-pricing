@@ -1,7 +1,7 @@
 # PPP Pricing Calculator
 
-Static site to compute PPP-adjusted pricing with a USD floor and export a
-`currency_ppp.yml` file.
+Static site to compute PPP-adjusted pricing with a USD floor, apply a 1.5x USD
+cap, and export a `currency_ppp.yml` file.
 
 ## Quick start
 

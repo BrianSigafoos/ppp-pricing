@@ -44,14 +44,15 @@
   - `exchange_rate_date` (ISO date string)
   - `exchange_rate_source` (string, e.g. `ecb`, `openexchangerates`, `manual`)
 
-## Calculation Logic (from sheet1 formulas)
+## Calculation Logic
 
 - Scale:
   - `ppp_scaled = ppp_rate * 1000`
   - `exch_scaled = exchange_rate * 1000`
-- Given inputs `usd_price` and `usd_floor`:
+- Given inputs `usd_price` and `usd_floor` (with a 1.5x USD cap):
   - `min_ppp_scaled = ceil((usd_floor * exch_scaled) / usd_price)`
-  - `adjusted_ppp_scaled = max(ppp_scaled, min_ppp_scaled)`
+  - `max_ppp_scaled = floor((usd_price * 1.5 * exch_scaled) / usd_price)`
+  - `adjusted_ppp_scaled = min(max(ppp_scaled, min_ppp_scaled), max_ppp_scaled)`
   - `adjustment_pct = (adjusted_ppp_scaled / ppp_scaled) - 1`
   - `usd_equiv_raw = (usd_price * ppp_scaled) / exch_scaled`
   - `usd_equiv_adjusted = (usd_price * adjusted_ppp_scaled) / exch_scaled`
