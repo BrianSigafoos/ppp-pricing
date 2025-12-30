@@ -1,0 +1,28 @@
+# Continuous Integration - basic validation for data + site files
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  validate:
+    name: Validate data
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Validate PPP data JSON
+        run: |
+          node -e "const fs=require('fs');const data=JSON.parse(fs.readFileSync('docs/data/ppp_rates.json','utf8'));if(!Array.isArray(data)||!data.length) throw new Error('PPP data missing');const missing=data.filter(r=>!r.currency_code);if(missing.length) throw new Error('Missing currency codes');console.log('rows', data.length);"
+
+      - name: Check site entrypoint
+        run: test -f docs/index.html

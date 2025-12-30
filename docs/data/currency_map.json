@@ -1,0 +1,794 @@
+{
+  "ABW": {
+    "country_name": "Aruba",
+    "currency_code": "awg",
+    "iso2": "AW",
+    "iso3": "ABW"
+  },
+  "AFG": {
+    "country_name": "Afghanistan",
+    "currency_code": "afn",
+    "iso2": "AF",
+    "iso3": "AFG"
+  },
+  "AGO": {
+    "country_name": "Angola",
+    "currency_code": "aoa",
+    "iso2": "AO",
+    "iso3": "AGO"
+  },
+  "ALB": {
+    "country_name": "Albania",
+    "currency_code": "all",
+    "iso2": "AL",
+    "iso3": "ALB"
+  },
+  "ARE": {
+    "country_name": "United Arab Emirates",
+    "currency_code": "aed",
+    "iso2": "AE",
+    "iso3": "ARE"
+  },
+  "ARG": {
+    "country_name": "Argentina",
+    "currency_code": "ars",
+    "iso2": "AR",
+    "iso3": "ARG"
+  },
+  "ARM": {
+    "country_name": "Armenia",
+    "currency_code": "amd",
+    "iso2": "AM",
+    "iso3": "ARM"
+  },
+  "AUS": {
+    "country_name": "Australia",
+    "currency_code": "aud",
+    "iso2": "AU",
+    "iso3": "AUS"
+  },
+  "AZE": {
+    "country_name": "Azerbaijan",
+    "currency_code": "azn",
+    "iso2": "AZ",
+    "iso3": "AZE"
+  },
+  "BDI": {
+    "country_name": "Burundi",
+    "currency_code": "bif",
+    "iso2": "BI",
+    "iso3": "BDI"
+  },
+  "BGD": {
+    "country_name": "Bangladesh",
+    "currency_code": "bdt",
+    "iso2": "BD",
+    "iso3": "BGD"
+  },
+  "BGR": {
+    "country_name": "Bulgaria",
+    "currency_code": "bgn",
+    "iso2": "BG",
+    "iso3": "BGR"
+  },
+  "BHS": {
+    "country_name": "Bahamas",
+    "currency_code": "bsd",
+    "iso2": "BS",
+    "iso3": "BHS"
+  },
+  "BIH": {
+    "country_name": "Bosnia and Herzegovina",
+    "currency_code": "bam",
+    "iso2": "BA",
+    "iso3": "BIH"
+  },
+  "BLZ": {
+    "country_name": "Belize",
+    "currency_code": "bzd",
+    "iso2": "BZ",
+    "iso3": "BLZ"
+  },
+  "BMU": {
+    "country_name": "Bermuda",
+    "currency_code": "bmd",
+    "iso2": "BM",
+    "iso3": "BMU"
+  },
+  "BOL": {
+    "country_name": "Bolivia",
+    "currency_code": "bob",
+    "iso2": "BO",
+    "iso3": "BOL"
+  },
+  "BRA": {
+    "country_name": "Brazil",
+    "currency_code": "brl",
+    "iso2": "BR",
+    "iso3": "BRA"
+  },
+  "BRB": {
+    "country_name": "Barbados",
+    "currency_code": "bbd",
+    "iso2": "BB",
+    "iso3": "BRB"
+  },
+  "BRN": {
+    "country_name": "Brunei Darussalam",
+    "currency_code": "bnd",
+    "iso2": "BN",
+    "iso3": "BRN"
+  },
+  "BWA": {
+    "country_name": "Botswana",
+    "currency_code": "bwp",
+    "iso2": "BW",
+    "iso3": "BWA"
+  },
+  "CAN": {
+    "country_name": "Canada",
+    "currency_code": "cad",
+    "iso2": "CA",
+    "iso3": "CAN"
+  },
+  "CHE": {
+    "country_name": "Switzerland",
+    "currency_code": "chf",
+    "iso2": "CH",
+    "iso3": "CHE"
+  },
+  "CHL": {
+    "country_name": "Chile",
+    "currency_code": "clp",
+    "iso2": "CL",
+    "iso3": "CHL"
+  },
+  "CHN": {
+    "country_name": "China",
+    "currency_code": "cny",
+    "iso2": "CN",
+    "iso3": "CHN"
+  },
+  "CIV": {
+    "country_name": "Cote d'Ivoire",
+    "currency_code": "xof",
+    "iso2": "CI",
+    "iso3": "CIV"
+  },
+  "CMR": {
+    "country_name": "Cameroon",
+    "currency_code": "xaf",
+    "iso2": "CM",
+    "iso3": "CMR"
+  },
+  "COD": {
+    "country_name": "Congo, Dem. Rep.",
+    "currency_code": "cdf",
+    "iso2": "CD",
+    "iso3": "COD"
+  },
+  "COL": {
+    "country_name": "Colombia",
+    "currency_code": "cop",
+    "iso2": "CO",
+    "iso3": "COL"
+  },
+  "COM": {
+    "country_name": "Comoros",
+    "currency_code": "kmf",
+    "iso2": "KM",
+    "iso3": "COM"
+  },
+  "CPV": {
+    "country_name": "Cabo Verde",
+    "currency_code": "cve",
+    "iso2": "CV",
+    "iso3": "CPV"
+  },
+  "CRI": {
+    "country_name": "Costa Rica",
+    "currency_code": "crc",
+    "iso2": "CR",
+    "iso3": "CRI"
+  },
+  "CUW": {
+    "country_name": "Curacao",
+    "currency_code": "ang",
+    "iso2": "CW",
+    "iso3": "CUW"
+  },
+  "CYM": {
+    "country_name": "Cayman Islands",
+    "currency_code": "kyd",
+    "iso2": "KY",
+    "iso3": "CYM"
+  },
+  "CZE": {
+    "country_name": "Czech Republic",
+    "currency_code": "czk",
+    "iso2": "CZ",
+    "iso3": "CZE"
+  },
+  "DJI": {
+    "country_name": "Djibouti",
+    "currency_code": "djf",
+    "iso2": "DJ",
+    "iso3": "DJI"
+  },
+  "DMA": {
+    "country_name": "Dominica",
+    "currency_code": "xcd",
+    "iso2": "DM",
+    "iso3": "DMA"
+  },
+  "DNK": {
+    "country_name": "Denmark",
+    "currency_code": "dkk",
+    "iso2": "DK",
+    "iso3": "DNK"
+  },
+  "DOM": {
+    "country_name": "Dominican Republic",
+    "currency_code": "dop",
+    "iso2": "DO",
+    "iso3": "DOM"
+  },
+  "DZA": {
+    "country_name": "Algeria",
+    "currency_code": "dzd",
+    "iso2": "DZ",
+    "iso3": "DZA"
+  },
+  "EGY": {
+    "country_name": "Egypt, Arab Rep.",
+    "currency_code": "egp",
+    "iso2": "EG",
+    "iso3": "EGY"
+  },
+  "ETH": {
+    "country_name": "Ethiopia",
+    "currency_code": "etb",
+    "iso2": "ET",
+    "iso3": "ETH"
+  },
+  "FJI": {
+    "country_name": "Fiji",
+    "currency_code": "fjd",
+    "iso2": "FJ",
+    "iso3": "FJI"
+  },
+  "GBR": {
+    "country_name": "United Kingdom",
+    "currency_code": "gbp",
+    "iso2": "GB",
+    "iso3": "GBR"
+  },
+  "GEO": {
+    "country_name": "Georgia",
+    "currency_code": "gel",
+    "iso2": "GE",
+    "iso3": "GEO"
+  },
+  "GIB": {
+    "country_name": "Gibraltar",
+    "currency_code": "gip",
+    "iso2": "GI",
+    "iso3": "GIB"
+  },
+  "GIN": {
+    "country_name": "Guinea",
+    "currency_code": "gnf",
+    "iso2": "GN",
+    "iso3": "GIN"
+  },
+  "GMB": {
+    "country_name": "Gambia, The",
+    "currency_code": "gmd",
+    "iso2": "GM",
+    "iso3": "GMB"
+  },
+  "GTM": {
+    "country_name": "Guatemala",
+    "currency_code": "gtq",
+    "iso2": "GT",
+    "iso3": "GTM"
+  },
+  "GUY": {
+    "country_name": "Guyana",
+    "currency_code": "gyd",
+    "iso2": "GY",
+    "iso3": "GUY"
+  },
+  "HKG": {
+    "country_name": "Honk Kong",
+    "currency_code": "hkd",
+    "iso2": "HK",
+    "iso3": "HKG"
+  },
+  "HND": {
+    "country_name": "Honduras",
+    "currency_code": "hnl",
+    "iso2": "HN",
+    "iso3": "HND"
+  },
+  "HTI": {
+    "country_name": "Haiti",
+    "currency_code": "htg",
+    "iso2": "HT",
+    "iso3": "HTI"
+  },
+  "HUN": {
+    "country_name": "Hungary",
+    "currency_code": "huf",
+    "iso2": "HU",
+    "iso3": "HUN"
+  },
+  "IDN": {
+    "country_name": "Indonesia",
+    "currency_code": "idr",
+    "iso2": "ID",
+    "iso3": "IDN"
+  },
+  "IND": {
+    "country_name": "India",
+    "currency_code": "inr",
+    "iso2": "IN",
+    "iso3": "IND"
+  },
+  "ISL": {
+    "country_name": "Iceland",
+    "currency_code": "isk",
+    "iso2": "IS",
+    "iso3": "ISL"
+  },
+  "ISR": {
+    "country_name": "Israel",
+    "currency_code": "ils",
+    "iso2": "IL",
+    "iso3": "ISR"
+  },
+  "JAM": {
+    "country_name": "Jamaica",
+    "currency_code": "jmd",
+    "iso2": "JM",
+    "iso3": "JAM"
+  },
+  "JPN": {
+    "country_name": "Japan",
+    "currency_code": "jpy",
+    "iso2": "JP",
+    "iso3": "JPN"
+  },
+  "KAZ": {
+    "country_name": "Kazakhstan",
+    "currency_code": "kzt",
+    "iso2": "KZ",
+    "iso3": "KAZ"
+  },
+  "KEN": {
+    "country_name": "Kenya",
+    "currency_code": "kes",
+    "iso2": "KE",
+    "iso3": "KEN"
+  },
+  "KGZ": {
+    "country_name": "Kyrgyz Republic",
+    "currency_code": "kgs",
+    "iso2": "KG",
+    "iso3": "KGZ"
+  },
+  "KHM": {
+    "country_name": "Cambodia",
+    "currency_code": "khr",
+    "iso2": "KH",
+    "iso3": "KHM"
+  },
+  "KOR": {
+    "country_name": "Korea, Rep.",
+    "currency_code": "krw",
+    "iso2": "KR",
+    "iso3": "KOR"
+  },
+  "LAO": {
+    "country_name": "Lao PDR",
+    "currency_code": "lak",
+    "iso2": "LA",
+    "iso3": "LAO"
+  },
+  "LBN": {
+    "country_name": "Lebanon",
+    "currency_code": "lbp",
+    "iso2": "LB",
+    "iso3": "LBN"
+  },
+  "LBR": {
+    "country_name": "Liberia",
+    "currency_code": "lrd",
+    "iso2": "LR",
+    "iso3": "LBR"
+  },
+  "LKA": {
+    "country_name": "Sri Lanka",
+    "currency_code": "lkr",
+    "iso2": "LK",
+    "iso3": "LKA"
+  },
+  "LSO": {
+    "country_name": "Lesotho",
+    "currency_code": "lsl",
+    "iso2": "LS",
+    "iso3": "LSO"
+  },
+  "MAC": {
+    "country_name": "Macao SAR, China",
+    "currency_code": "mop",
+    "iso2": "MO",
+    "iso3": "MAC"
+  },
+  "MAR": {
+    "country_name": "Morocco",
+    "currency_code": "mad",
+    "iso2": "MA",
+    "iso3": "MAR"
+  },
+  "MDA": {
+    "country_name": "Moldova",
+    "currency_code": "mdl",
+    "iso2": "MD",
+    "iso3": "MDA"
+  },
+  "MDG": {
+    "country_name": "Madagascar",
+    "currency_code": "mga",
+    "iso2": "MG",
+    "iso3": "MDG"
+  },
+  "MDV": {
+    "country_name": "Maldives",
+    "currency_code": "mvr",
+    "iso2": "MV",
+    "iso3": "MDV"
+  },
+  "MEX": {
+    "country_name": "Mexico",
+    "currency_code": "mxn",
+    "iso2": "MX",
+    "iso3": "MEX"
+  },
+  "MKD": {
+    "country_name": "Macedonia, FYR",
+    "currency_code": "mkd",
+    "iso2": "MK",
+    "iso3": "MKD"
+  },
+  "MMR": {
+    "country_name": "Myanmar",
+    "currency_code": "mmk",
+    "iso2": "MM",
+    "iso3": "MMR"
+  },
+  "MNG": {
+    "country_name": "Mongolia",
+    "currency_code": "mnt",
+    "iso2": "MN",
+    "iso3": "MNG"
+  },
+  "MOZ": {
+    "country_name": "Mozambique",
+    "currency_code": "mzn",
+    "iso2": "MZ",
+    "iso3": "MOZ"
+  },
+  "MRT": {
+    "country_name": "Mauritania",
+    "currency_code": "mro",
+    "iso2": "MR",
+    "iso3": "MRT"
+  },
+  "MUS": {
+    "country_name": "Mauritius",
+    "currency_code": "mur",
+    "iso2": "MU",
+    "iso3": "MUS"
+  },
+  "MWI": {
+    "country_name": "Malawi",
+    "currency_code": "mwk",
+    "iso2": "MW",
+    "iso3": "MWI"
+  },
+  "MYS": {
+    "country_name": "Malaysia",
+    "currency_code": "myr",
+    "iso2": "MY",
+    "iso3": "MYS"
+  },
+  "NAM": {
+    "country_name": "Namibia",
+    "currency_code": "nad",
+    "iso2": "NA",
+    "iso3": "NAM"
+  },
+  "NGA": {
+    "country_name": "Nigeria",
+    "currency_code": "ngn",
+    "iso2": "NG",
+    "iso3": "NGA"
+  },
+  "NIC": {
+    "country_name": "Nicaragua",
+    "currency_code": "nio",
+    "iso2": "NI",
+    "iso3": "NIC"
+  },
+  "NOR": {
+    "country_name": "Norway",
+    "currency_code": "nok",
+    "iso2": "NO",
+    "iso3": "NOR"
+  },
+  "NPL": {
+    "country_name": "Nepal",
+    "currency_code": "npr",
+    "iso2": "NP",
+    "iso3": "NPL"
+  },
+  "NZL": {
+    "country_name": "New Zealand",
+    "currency_code": "nzd",
+    "iso2": "NZ",
+    "iso3": "NZL"
+  },
+  "PAK": {
+    "country_name": "Pakistan",
+    "currency_code": "pkr",
+    "iso2": "PK",
+    "iso3": "PAK"
+  },
+  "PAN": {
+    "country_name": "Panama",
+    "currency_code": "pab",
+    "iso2": "PA",
+    "iso3": "PAN"
+  },
+  "PER": {
+    "country_name": "Peru",
+    "currency_code": "pen",
+    "iso2": "PE",
+    "iso3": "PER"
+  },
+  "PHL": {
+    "country_name": "Philippines",
+    "currency_code": "php",
+    "iso2": "PH",
+    "iso3": "PHL"
+  },
+  "PNG": {
+    "country_name": "Papua New Guinea",
+    "currency_code": "pgk",
+    "iso2": "PG",
+    "iso3": "PNG"
+  },
+  "POL": {
+    "country_name": "Poland",
+    "currency_code": "pln",
+    "iso2": "PL",
+    "iso3": "POL"
+  },
+  "PRY": {
+    "country_name": "Paraguay",
+    "currency_code": "pyg",
+    "iso2": "PY",
+    "iso3": "PRY"
+  },
+  "PYF": {
+    "country_name": "French Polynesia",
+    "currency_code": "xpf",
+    "iso2": "PF",
+    "iso3": "PYF"
+  },
+  "QAT": {
+    "country_name": "Qatar",
+    "currency_code": "qar",
+    "iso2": "QA",
+    "iso3": "QAT"
+  },
+  "ROU": {
+    "country_name": "Romania",
+    "currency_code": "ron",
+    "iso2": "RO",
+    "iso3": "ROU"
+  },
+  "RUS": {
+    "country_name": "Russia",
+    "currency_code": "rub",
+    "iso2": "RU",
+    "iso3": "RUS"
+  },
+  "RWA": {
+    "country_name": "Rwanda",
+    "currency_code": "rwf",
+    "iso2": "RW",
+    "iso3": "RWA"
+  },
+  "SAU": {
+    "country_name": "Saudi Arabia",
+    "currency_code": "sar",
+    "iso2": "SA",
+    "iso3": "SAU"
+  },
+  "SGP": {
+    "country_name": "Singapore",
+    "currency_code": "sgd",
+    "iso2": "SG",
+    "iso3": "SGP"
+  },
+  "SH": {
+    "country_name": "Saint Helena",
+    "currency_code": "shp",
+    "iso2": "SH",
+    "iso3": "SH"
+  },
+  "SLB": {
+    "country_name": "Solomon Islands",
+    "currency_code": "sbd",
+    "iso2": "SB",
+    "iso3": "SLB"
+  },
+  "SLE": {
+    "country_name": "Sierra Leone",
+    "currency_code": "sll",
+    "iso2": "SL",
+    "iso3": "SLE"
+  },
+  "SOM": {
+    "country_name": "Somalia",
+    "currency_code": "sos",
+    "iso2": "SO",
+    "iso3": "SOM"
+  },
+  "SRB": {
+    "country_name": "Serbia",
+    "currency_code": "rsd",
+    "iso2": "RS",
+    "iso3": "SRB"
+  },
+  "STP": {
+    "country_name": "Sao Tome and Principe",
+    "currency_code": "std",
+    "iso2": "ST",
+    "iso3": "STP"
+  },
+  "SUR": {
+    "country_name": "Suriname",
+    "currency_code": "srd",
+    "iso2": "SR",
+    "iso3": "SUR"
+  },
+  "SWE": {
+    "country_name": "Sweden",
+    "currency_code": "sek",
+    "iso2": "SE",
+    "iso3": "SWE"
+  },
+  "SWZ": {
+    "country_name": "Swaziland",
+    "currency_code": "szl",
+    "iso2": "SZ",
+    "iso3": "SWZ"
+  },
+  "SYC": {
+    "country_name": "Seychelles",
+    "currency_code": "scr",
+    "iso2": "SC",
+    "iso3": "SYC"
+  },
+  "THA": {
+    "country_name": "Thailand",
+    "currency_code": "thb",
+    "iso2": "TH",
+    "iso3": "THA"
+  },
+  "TJK": {
+    "country_name": "Tajikistan",
+    "currency_code": "tjs",
+    "iso2": "TJ",
+    "iso3": "TJK"
+  },
+  "TON": {
+    "country_name": "Tonga",
+    "currency_code": "top",
+    "iso2": "TO",
+    "iso3": "TON"
+  },
+  "TTO": {
+    "country_name": "Trinidad and Tobago",
+    "currency_code": "ttd",
+    "iso2": "TT",
+    "iso3": "TTO"
+  },
+  "TUR": {
+    "country_name": "Turkey",
+    "currency_code": "try",
+    "iso2": "TR",
+    "iso3": "TUR"
+  },
+  "TWN": {
+    "country_name": "Taiwan",
+    "currency_code": "twd",
+    "iso2": "TW",
+    "iso3": "TWN"
+  },
+  "TZA": {
+    "country_name": "Tanzania",
+    "currency_code": "tzs",
+    "iso2": "TZ",
+    "iso3": "TZA"
+  },
+  "UGA": {
+    "country_name": "Uganda",
+    "currency_code": "ugx",
+    "iso2": "UG",
+    "iso3": "UGA"
+  },
+  "UKR": {
+    "country_name": "Ukraine",
+    "currency_code": "uah",
+    "iso2": "UA",
+    "iso3": "UKR"
+  },
+  "URY": {
+    "country_name": "Uruguay",
+    "currency_code": "uyu",
+    "iso2": "UY",
+    "iso3": "URY"
+  },
+  "USA": {
+    "country_name": "United States",
+    "currency_code": "usd",
+    "iso2": "US",
+    "iso3": "USA"
+  },
+  "UZB": {
+    "country_name": "Uzbekistan",
+    "currency_code": "uzs",
+    "iso2": "UZ",
+    "iso3": "UZB"
+  },
+  "VNM": {
+    "country_name": "Vietnam",
+    "currency_code": "vnd",
+    "iso2": "VN",
+    "iso3": "VNM"
+  },
+  "VUT": {
+    "country_name": "Vanuatu",
+    "currency_code": "vuv",
+    "iso2": "VU",
+    "iso3": "VUT"
+  },
+  "WSM": {
+    "country_name": "Samoa",
+    "currency_code": "wst",
+    "iso2": "WS",
+    "iso3": "WSM"
+  },
+  "YEM": {
+    "country_name": "Yemen, Rep.",
+    "currency_code": "yer",
+    "iso2": "YE",
+    "iso3": "YEM"
+  },
+  "ZAF": {
+    "country_name": "South Africa",
+    "currency_code": "zar",
+    "iso2": "ZA",
+    "iso3": "ZAF"
+  },
+  "ZMB": {
+    "country_name": "Zambia",
+    "currency_code": "zmw",
+    "iso2": "ZM",
+    "iso3": "ZMB"
+  }
+}
