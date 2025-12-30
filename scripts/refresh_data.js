@@ -6,6 +6,8 @@ const DEFAULT_MAPPING = 'docs/data/currency_map.json'
 const DEFAULT_OUT = 'docs/data/ppp_rates.json'
 const DEFAULT_RAW_DIR = 'data/raw'
 
+const USER_AGENT = 'ppp-pricing-refresh/1.0'
+
 const WB_URL =
   'https://api.worldbank.org/v2/country/all/indicator/PA.NUS.PPP?format=json&per_page=20000'
 const ECB_URL = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml'
@@ -21,15 +23,26 @@ function parseArgs (argv) {
   }
   for (let i = 2; i < argv.length; i++) {
     const arg = argv[i]
-    if (arg === '--mapping') args.mapping = argv[++i]
-    else if (arg === '--out') args.out = argv[++i]
-    else if (arg === '--exchange-source') args.exchangeSource = argv[++i]
-    else if (arg === '--save-raw') {
+    if (arg === '--mapping') {
+      const value = argv[++i]
+      if (!value) throw new Error('--mapping requires a path')
+      args.mapping = value
+    } else if (arg === '--out') {
+      const value = argv[++i]
+      if (!value) throw new Error('--out requires a path')
+      args.out = value
+    } else if (arg === '--exchange-source') {
+      const value = argv[++i]
+      if (!value) throw new Error('--exchange-source requires a value')
+      args.exchangeSource = value.toLowerCase()
+    } else if (arg === '--save-raw') {
       args.saveRaw = true
       args.rawDir = DEFAULT_RAW_DIR
     } else if (arg === '--raw-dir') {
       args.saveRaw = true
-      args.rawDir = argv[++i]
+      const value = argv[++i]
+      if (!value) throw new Error('--raw-dir requires a path')
+      args.rawDir = value
     }
   }
   return args
@@ -41,7 +54,7 @@ function ensureDir (dirPath) {
 
 async function fetchText (url) {
   const res = await fetch(url, {
-    headers: { 'User-Agent': 'ppp-pricing-refresh/1.0' }
+    headers: { 'User-Agent': USER_AGENT }
   })
   if (!res.ok) {
     throw new Error(`Fetch failed ${res.status} for ${url}`)
@@ -51,7 +64,7 @@ async function fetchText (url) {
 
 async function fetchJson (url) {
   const res = await fetch(url, {
-    headers: { 'User-Agent': 'ppp-pricing-refresh/1.0' }
+    headers: { 'User-Agent': USER_AGENT }
   })
   if (!res.ok) {
     throw new Error(`Fetch failed ${res.status} for ${url}`)
@@ -144,10 +157,14 @@ function parseWorldBankRecords (records) {
 
 function sortData (data) {
   return data.sort((a, b) => {
-    if (a.currency_code === b.currency_code) {
-      return a.country_name.localeCompare(b.country_name)
+    const codeA = String(a.currency_code || '')
+    const codeB = String(b.currency_code || '')
+    if (codeA === codeB) {
+      return String(a.country_name || '').localeCompare(
+        String(b.country_name || '')
+      )
     }
-    return a.currency_code.localeCompare(b.currency_code)
+    return codeA.localeCompare(codeB)
   })
 }
 
@@ -156,11 +173,18 @@ async function main () {
   const mappingPath = path.resolve(args.mapping)
   const outPath = path.resolve(args.out)
 
+  if (typeof fetch !== 'function') {
+    throw new Error('This script requires Node.js 18+ (global fetch support).')
+  }
+
   if (!fs.existsSync(mappingPath)) {
     throw new Error(`Mapping not found: ${mappingPath}`)
   }
 
   const mapping = JSON.parse(fs.readFileSync(mappingPath, 'utf-8'))
+  const mappingEntries = Array.isArray(mapping)
+    ? mapping
+    : Object.values(mapping)
 
   const [wbJson, exchange] = await Promise.all([
     fetchJson(WB_URL),
@@ -190,23 +214,24 @@ async function main () {
   let missingExch = 0
   let missingPppYear = 0
 
-  for (const entry of Object.values(mapping)) {
+  for (const entry of mappingEntries) {
     const ppp = wbLatest[entry.iso2] || wbLatest[entry.iso3] || null
     if (!ppp) missingPpp++
     if (ppp && !ppp.year) missingPppYear++
 
-    const currencyCode = entry.currency_code
+    const currencyCode = entry.currency_code || null
+    const currencyKey =
+      typeof currencyCode === 'string' ? currencyCode.toUpperCase() : null
     const exchRate =
-      currencyCode && usdRates[currencyCode.toUpperCase()]
-        ? usdRates[currencyCode.toUpperCase()]
-        : null
+      currencyKey && usdRates[currencyKey] ? usdRates[currencyKey] : null
     if (!exchRate) missingExch++
 
     rows.push({
       country_name: entry.country_name,
       iso3: entry.iso3,
       iso2: entry.iso2,
-      currency_code: currencyCode,
+      currency_code:
+        typeof currencyCode === 'string' ? currencyCode.toLowerCase() : null,
       ppp_rate: ppp ? ppp.value : null,
       ppp_year: ppp ? ppp.year : null,
       ppp_source: 'world_bank',

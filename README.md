@@ -24,6 +24,8 @@ USD cap (1x–3x), and export `currency_ppp.yml` or JSON.
 node scripts/refresh_data.js
 ```
 
+Requires Node.js 18+ (global `fetch`).
+
 Options:
 
 ```
