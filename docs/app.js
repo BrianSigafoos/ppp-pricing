@@ -1,8 +1,8 @@
-const DEFAULT_USD_PRICE = 20;
-const DEFAULT_USD_FLOOR = 5;
-const DEFAULT_CAP_MULTIPLIER = 1.5;
-const DEFAULT_SORT = "currency_code";
-const SHARE_BASE_URL = "https://ppp-pricing.bfoos.net";
+const DEFAULT_USD_PRICE = 20
+const DEFAULT_USD_FLOOR = 5
+const DEFAULT_CAP_MULTIPLIER = 1.5
+const DEFAULT_SORT = 'currency_code'
+const SHARE_BASE_URL = 'https://ppp-pricing.bfoos.net'
 
 const state = {
   data: [],
@@ -11,83 +11,82 @@ const state = {
   usdCapMultiplier: DEFAULT_CAP_MULTIPLIER,
   showExtra: false,
   sortBy: DEFAULT_SORT,
-  search: "",
-};
+  search: ''
+}
 const SORT_OPTIONS = new Set([
-  "country_name",
-  "currency_code",
-  "ppp_rate",
-  "exchange_rate",
-  "adjusted_ppp_rate",
-  "adjustment_pct",
-  "currency_price",
-  "usd_equiv_adjusted",
-  "ppp_year",
-  "ppp_source",
-  "exchange_rate_date",
-  "exchange_rate_source",
-]);
+  'country_name',
+  'currency_code',
+  'ppp_rate',
+  'exchange_rate',
+  'adjusted_ppp_rate',
+  'adjustment_pct',
+  'currency_price',
+  'usd_equiv_adjusted',
+  'ppp_year',
+  'ppp_source',
+  'exchange_rate_date',
+  'exchange_rate_source'
+])
 
 const formatters = {
-  rate: new Intl.NumberFormat("en-US", {
+  rate: new Intl.NumberFormat('en-US', {
     minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
+    maximumFractionDigits: 2
   }),
-  integer: new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 }),
-  usd: new Intl.NumberFormat("en", {
-    style: "currency",
-    currency: "USD",
+  integer: new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }),
+  usd: new Intl.NumberFormat('en', {
+    style: 'currency',
+    currency: 'USD'
   }),
-  percent: new Intl.NumberFormat("en-US", {
-    style: "percent",
+  percent: new Intl.NumberFormat('en-US', {
+    style: 'percent',
     minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }),
-};
+    maximumFractionDigits: 0
+  })
+}
 
-const currencyFormatterCache = new Map();
+const currencyFormatterCache = new Map()
 
-function formatCurrency(value, currencyCode) {
-  if (value === null || value === undefined || Number.isNaN(value)) return "-";
-  if (!currencyCode) return formatters.usd.format(value);
-  const code = currencyCode.toUpperCase();
+function formatCurrency (value, currencyCode) {
+  if (value === null || value === undefined || Number.isNaN(value)) return '-'
+  if (!currencyCode) return formatters.usd.format(value)
+  const code = currencyCode.toUpperCase()
   if (!currencyFormatterCache.has(code)) {
     try {
       currencyFormatterCache.set(
         code,
-        new Intl.NumberFormat("en", {
-          style: "currency",
-          currency: code,
-        }),
-      );
+        new Intl.NumberFormat('en', {
+          style: 'currency',
+          currency: code
+        })
+      )
     } catch (error) {
-      currencyFormatterCache.set(code, formatters.usd);
+      currencyFormatterCache.set(code, formatters.usd)
     }
   }
-  return currencyFormatterCache.get(code).format(value);
+  return currencyFormatterCache.get(code).format(value)
 }
 
-function parseNumber(value) {
-  if (value === null || value === undefined || value === "") return null;
-  const num = Number(value);
-  return Number.isFinite(num) ? num : null;
+function parseNumber (value) {
+  if (value === null || value === undefined || value === '') return null
+  const num = Number(value)
+  return Number.isFinite(num) ? num : null
 }
 
-function roundTo(value, increment) {
-  if (value === null || value === undefined || Number.isNaN(value))
-    return value;
-  return Math.round(value / increment) * increment;
+function roundTo (value, increment) {
+  if (value === null || value === undefined || Number.isNaN(value)) { return value }
+  return Math.round(value / increment) * increment
 }
 
-function computeRow(row, usdPrice, usdFloor, usdCapMultiplier) {
-  const pppRate = parseNumber(row.ppp_rate);
-  const exchRate = parseNumber(row.exchange_rate);
+function computeRow (row, usdPrice, usdFloor, usdCapMultiplier) {
+  const pppRate = parseNumber(row.ppp_rate)
+  const exchRate = parseNumber(row.exchange_rate)
   const valid =
     pppRate !== null &&
     exchRate !== null &&
     pppRate > 0 &&
     exchRate > 0 &&
-    usdPrice > 0;
+    usdPrice > 0
   if (!valid) {
     return {
       ...row,
@@ -98,23 +97,23 @@ function computeRow(row, usdPrice, usdFloor, usdCapMultiplier) {
       adjusted_ppp_scaled: null,
       adjustment_pct: null,
       usd_equiv_raw: null,
-      usd_equiv_adjusted: null,
-    };
+      usd_equiv_adjusted: null
+    }
   }
 
-  const pppScaledRaw = pppRate * 1000;
-  const pppScaledRounded = Math.ceil(pppScaledRaw);
-  const exchScaled = exchRate * 1000;
-  const minPppScaled = Math.ceil((usdFloor * exchScaled) / usdPrice);
+  const pppScaledRaw = pppRate * 1000
+  const pppScaledRounded = Math.ceil(pppScaledRaw)
+  const exchScaled = exchRate * 1000
+  const minPppScaled = Math.ceil((usdFloor * exchScaled) / usdPrice)
   const capPppScaled = Math.floor(
-    (usdPrice * usdCapMultiplier * exchScaled) / usdPrice,
-  );
-  const adjustedPppScaled = Math.max(pppScaledRounded, minPppScaled);
-  const finalPppScaled = Math.min(adjustedPppScaled, capPppScaled);
+    (usdPrice * usdCapMultiplier * exchScaled) / usdPrice
+  )
+  const adjustedPppScaled = Math.max(pppScaledRounded, minPppScaled)
+  const finalPppScaled = Math.min(adjustedPppScaled, capPppScaled)
   const adjustmentPct =
-    pppScaledRounded > 0 ? finalPppScaled / pppScaledRounded - 1 : null;
-  const usdEquivRaw = (usdPrice * pppScaledRaw) / exchScaled;
-  const usdEquivAdjusted = (usdPrice * finalPppScaled) / exchScaled;
+    pppScaledRounded > 0 ? finalPppScaled / pppScaledRounded - 1 : null
+  const usdEquivRaw = (usdPrice * pppScaledRaw) / exchScaled
+  const usdEquivAdjusted = (usdPrice * finalPppScaled) / exchScaled
 
   return {
     ...row,
@@ -129,428 +128,428 @@ function computeRow(row, usdPrice, usdFloor, usdCapMultiplier) {
     currency_price: roundTo((usdPrice * finalPppScaled) / 1000, 0.25),
     usd_equiv_raw: usdEquivRaw,
     usd_equiv_adjusted: usdEquivAdjusted,
-    cap_ppp_scaled: capPppScaled,
-  };
+    cap_ppp_scaled: capPppScaled
+  }
 }
 
-function formatValue(value, formatter) {
-  if (value === null || value === undefined || Number.isNaN(value)) return "-";
-  return formatter.format(value);
+function formatValue (value, formatter) {
+  if (value === null || value === undefined || Number.isNaN(value)) return '-'
+  return formatter.format(value)
 }
 
-function buildColumns(showExtra) {
+function buildColumns (showExtra) {
   const base = [
-    { key: "country_name", label: "Country", sortable: true },
-    { key: "currency_code", label: "Currency", sortable: true },
+    { key: 'country_name', label: 'Country', sortable: true },
+    { key: 'currency_code', label: 'Currency', sortable: true },
     {
-      key: "ppp_rate",
-      label: "PPP rate",
+      key: 'ppp_rate',
+      label: 'PPP rate',
       format: (v) => formatValue(v, formatters.rate),
-      sortable: true,
+      sortable: true
     },
     {
-      key: "exchange_rate",
-      label: "FX rate",
+      key: 'exchange_rate',
+      label: 'FX rate',
       format: (v) => formatValue(v, formatters.rate),
-      sortable: true,
+      sortable: true
     },
     {
-      key: "adjusted_ppp_rate",
-      label: "Adjusted PPP",
+      key: 'adjusted_ppp_rate',
+      label: 'Adjusted PPP',
       format: (v) => formatValue(v, formatters.rate),
-      sortable: true,
+      sortable: true
     },
     {
-      key: "adjustment_pct",
-      label: "ADJ %",
-      format: (v) => (v === null ? "-" : formatters.percent.format(v)),
-      sortable: true,
+      key: 'adjustment_pct',
+      label: 'ADJ %',
+      format: (v) => (v === null ? '-' : formatters.percent.format(v)),
+      sortable: true
     },
     {
-      key: "currency_price",
-      label: "Local price",
+      key: 'currency_price',
+      label: 'Local price',
       format: (v, row) => formatCurrency(v, row.currency_code),
-      sortable: true,
+      sortable: true
     },
     {
-      key: "usd_equiv_adjusted",
-      label: "USD equiv",
+      key: 'usd_equiv_adjusted',
+      label: 'USD equiv',
       format: (v) => formatValue(v, formatters.usd),
-      sortable: true,
-    },
-  ];
+      sortable: true
+    }
+  ]
 
   const extra = [
     {
-      key: "ppp_year",
-      label: "PPP year",
-      sortable: true,
+      key: 'ppp_year',
+      label: 'PPP year',
+      sortable: true
     },
-    { key: "ppp_source", label: "PPP source", sortable: true },
-    { key: "exchange_rate_date", label: "FX date", sortable: true },
-    { key: "exchange_rate_source", label: "FX source", sortable: true },
-  ];
+    { key: 'ppp_source', label: 'PPP source', sortable: true },
+    { key: 'exchange_rate_date', label: 'FX date', sortable: true },
+    { key: 'exchange_rate_source', label: 'FX source', sortable: true }
+  ]
 
-  return base.concat(showExtra ? extra : []);
+  return base.concat(showExtra ? extra : [])
 }
 
-function renderTable(rows, columns) {
-  const head = document.getElementById("tableHead");
-  const body = document.getElementById("tableBody");
+function renderTable (rows, columns) {
+  const head = document.getElementById('tableHead')
+  const body = document.getElementById('tableBody')
 
   head.innerHTML = `<tr>${columns
     .map((col) => {
-      const isSorted = col.key === state.sortBy;
+      const isSorted = col.key === state.sortBy
       const classes = [
-        col.sortable ? "sortable" : "",
-        isSorted ? "is-sorted" : "",
+        col.sortable ? 'sortable' : '',
+        isSorted ? 'is-sorted' : ''
       ]
         .filter(Boolean)
-        .join(" ");
-      const indicator = isSorted ? '<span class="sort-indicator">▾</span>' : "";
-      return `<th class="${classes}" data-sort="${col.key}">${col.label}${indicator}</th>`;
+        .join(' ')
+      const indicator = isSorted ? '<span class="sort-indicator">▾</span>' : ''
+      return `<th class="${classes}" data-sort="${col.key}">${col.label}${indicator}</th>`
     })
-    .join("")}</tr>`;
+    .join('')}</tr>`
 
   body.innerHTML = rows
     .map((row) => {
       const classes = [
-        row.isCapped ? "is-capped" : "",
-        row.isAdjusted ? "is-adjusted" : "",
-        row.isMissing ? "is-missing" : "",
+        row.isCapped ? 'is-capped' : '',
+        row.isAdjusted ? 'is-adjusted' : '',
+        row.isMissing ? 'is-missing' : ''
       ]
         .filter(Boolean)
-        .join(" ");
+        .join(' ')
       return `<tr class="${classes}">${columns
         .map((col) => {
-          let value = row[col.key];
-          if (col.key === "currency_code" && value) {
-            value = value.toUpperCase();
+          let value = row[col.key]
+          if (col.key === 'currency_code' && value) {
+            value = value.toUpperCase()
           }
           const text = col.format
             ? col.format(value, row)
-            : value === null || value === undefined || value === ""
-              ? "-"
-              : value;
+            : value === null || value === undefined || value === ''
+              ? '-'
+              : value
           const cellClasses = [
-            col.key === "currency_code" ? "pill" : "",
-            col.key === "adjusted_ppp_rate" && !row.isAdjusted
-              ? "is-muted"
-              : "",
+            col.key === 'currency_code' ? 'pill' : '',
+            col.key === 'adjusted_ppp_rate' && !row.isAdjusted
+              ? 'is-muted'
+              : ''
           ]
             .filter(Boolean)
-            .join(" ");
+            .join(' ')
           if (cellClasses) {
-            return `<td><span class="${cellClasses}">${text}</span></td>`;
+            return `<td><span class="${cellClasses}">${text}</span></td>`
           }
-          return `<td>${text}</td>`;
+          return `<td>${text}</td>`
         })
-        .join("")}</tr>`;
+        .join('')}</tr>`
     })
-    .join("");
+    .join('')
 }
 
-function sortRows(rows, sortBy) {
-  const sorted = [...rows];
+function sortRows (rows, sortBy) {
+  const sorted = [...rows]
   sorted.sort((a, b) => {
-    const valA = a[sortBy];
-    const valB = b[sortBy];
-    if (typeof valA === "number" && typeof valB === "number") {
-      return valB - valA;
+    const valA = a[sortBy]
+    const valB = b[sortBy]
+    if (typeof valA === 'number' && typeof valB === 'number') {
+      return valB - valA
     }
-    return String(valA || "").localeCompare(String(valB || ""));
-  });
-  return sorted;
+    return String(valA || '').localeCompare(String(valB || ''))
+  })
+  return sorted
 }
 
-function getDuplicateNote(data) {
-  const counts = {};
+function getDuplicateNote (data) {
+  const counts = {}
   data.forEach((row) => {
-    if (!row.currency_code) return;
-    const code = row.currency_code.toLowerCase();
-    counts[code] = (counts[code] || 0) + 1;
-  });
-  const duplicates = Object.entries(counts).filter(([, count]) => count > 1);
-  if (!duplicates.length) return "";
-  return `Duplicate currencies: ${duplicates.length}. YAML export keeps the first country per currency (alphabetical).`;
+    if (!row.currency_code) return
+    const code = row.currency_code.toLowerCase()
+    counts[code] = (counts[code] || 0) + 1
+  })
+  const duplicates = Object.entries(counts).filter(([, count]) => count > 1)
+  if (!duplicates.length) return ''
+  return `Duplicate currencies: ${duplicates.length}. YAML export keeps the first country per currency (alphabetical).`
 }
 
-function updateSummary(rows, computed) {
-  const total = computed.length;
-  const adjusted = computed.filter((row) => row.isAdjusted).length;
-  const capped = computed.filter((row) => row.isCapped).length;
-  const missing = computed.filter((row) => row.isMissing).length;
+function updateSummary (rows, computed) {
+  const total = computed.length
+  const adjusted = computed.filter((row) => row.isAdjusted).length
+  const capped = computed.filter((row) => row.isCapped).length
+  const missing = computed.filter((row) => row.isMissing).length
   const exchangeDate =
-    rows.find((row) => row.exchange_rate_date)?.exchange_rate_date || "-";
+    rows.find((row) => row.exchange_rate_date)?.exchange_rate_date || '-'
 
-  document.getElementById("countTotal").textContent = total;
-  document.getElementById("countAdjusted").textContent = adjusted;
-  document.getElementById("countCapped").textContent = capped;
-  document.getElementById("countMissing").textContent = missing;
-  document.getElementById("exchangeDate").textContent = exchangeDate;
-  const note = getDuplicateNote(rows);
-  const noteEl = document.getElementById("duplicateNote");
-  noteEl.textContent = note;
-  noteEl.style.display = note ? "block" : "none";
+  document.getElementById('countTotal').textContent = total
+  document.getElementById('countAdjusted').textContent = adjusted
+  document.getElementById('countCapped').textContent = capped
+  document.getElementById('countMissing').textContent = missing
+  document.getElementById('exchangeDate').textContent = exchangeDate
+  const note = getDuplicateNote(rows)
+  const noteEl = document.getElementById('duplicateNote')
+  noteEl.textContent = note
+  noteEl.style.display = note ? 'block' : 'none'
 }
 
-function buildShareUrl(baseUrl) {
-  const params = new URLSearchParams();
+function buildShareUrl (baseUrl) {
+  const params = new URLSearchParams()
   if (state.usdPrice !== DEFAULT_USD_PRICE) {
-    params.set("price", state.usdPrice.toFixed(2));
+    params.set('price', state.usdPrice.toFixed(2))
   }
   if (state.usdFloor !== DEFAULT_USD_FLOOR) {
-    params.set("floor", state.usdFloor.toFixed(2));
+    params.set('floor', state.usdFloor.toFixed(2))
   }
   if (state.usdCapMultiplier !== DEFAULT_CAP_MULTIPLIER) {
-    params.set("cap", state.usdCapMultiplier.toFixed(2));
+    params.set('cap', state.usdCapMultiplier.toFixed(2))
   }
-  if (state.sortBy !== DEFAULT_SORT) params.set("sort", state.sortBy);
-  if (state.search) params.set("search", state.search);
-  if (state.showExtra) params.set("extra", "1");
-  const query = params.toString();
-  const base = baseUrl || window.location.pathname;
-  return query ? `${base}?${query}` : base;
+  if (state.sortBy !== DEFAULT_SORT) params.set('sort', state.sortBy)
+  if (state.search) params.set('search', state.search)
+  if (state.showExtra) params.set('extra', '1')
+  const query = params.toString()
+  const base = baseUrl || window.location.pathname
+  return query ? `${base}?${query}` : base
 }
 
-function buildYaml(rows, usdPrice, usdFloor, usdCapMultiplier) {
+function buildYaml (rows, usdPrice, usdFloor, usdCapMultiplier) {
   const computed = rows
     .map((row) => computeRow(row, usdPrice, usdFloor, usdCapMultiplier))
     .filter((row) => !row.isMissing)
     .sort(
       (a, b) =>
         a.currency_code.localeCompare(b.currency_code) ||
-        a.country_name.localeCompare(b.country_name),
-    );
+        a.country_name.localeCompare(b.country_name)
+    )
 
-  const deduped = new Map();
+  const deduped = new Map()
   for (const row of computed) {
-    const code = row.currency_code.toLowerCase();
-    if (deduped.has(code)) continue;
-    deduped.set(code, row.adjusted_ppp_scaled);
+    const code = row.currency_code.toLowerCase()
+    if (deduped.has(code)) continue
+    deduped.set(code, row.adjusted_ppp_scaled)
   }
 
   const lines = [
     `# Generated ${new Date().toISOString().slice(0, 10)}`,
     `# USD price: ${usdPrice}, USD floor: ${usdFloor}`,
     `# USD cap multiplier: ${usdCapMultiplier}x`,
-    `# Source: ${buildShareUrl(SHARE_BASE_URL)}`,
-  ];
+    `# Source: ${buildShareUrl(SHARE_BASE_URL)}`
+  ]
   for (const [code, value] of deduped.entries()) {
-    lines.push(`${code}: ${value}`);
+    lines.push(`${code}: ${value}`)
   }
-  return `${lines.join("\n")}\n`;
+  return `${lines.join('\n')}\n`
 }
 
-function buildJson(rows, usdPrice, usdFloor, usdCapMultiplier) {
+function buildJson (rows, usdPrice, usdFloor, usdCapMultiplier) {
   const computed = rows.map((row) =>
-    computeRow(row, usdPrice, usdFloor, usdCapMultiplier),
-  );
+    computeRow(row, usdPrice, usdFloor, usdCapMultiplier)
+  )
   const payload = {
     generated_at: new Date().toISOString(),
     usd_price: usdPrice,
     usd_floor: usdFloor,
     usd_cap_multiplier: usdCapMultiplier,
-    rows: computed,
-  };
-  return `${JSON.stringify(payload, null, 2)}\n`;
+    rows: computed
+  }
+  return `${JSON.stringify(payload, null, 2)}\n`
 }
 
-function downloadFile(filename, content, type) {
-  const mimeType = type || "text/plain;charset=utf-8";
-  const blob = new Blob([content], { type: mimeType });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = filename;
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
-  URL.revokeObjectURL(url);
+function downloadFile (filename, content, type) {
+  const mimeType = type || 'text/plain;charset=utf-8'
+  const blob = new Blob([content], { type: mimeType })
+  const url = URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.href = url
+  link.download = filename
+  document.body.appendChild(link)
+  link.click()
+  link.remove()
+  URL.revokeObjectURL(url)
 }
 
-function render() {
-  const columns = buildColumns(state.showExtra);
+function render () {
+  const columns = buildColumns(state.showExtra)
   const filtered = state.data.filter((row) => {
-    if (!state.search) return true;
-    const term = state.search.toLowerCase();
+    if (!state.search) return true
+    const term = state.search.toLowerCase()
     return (
-      (row.country_name || "").toLowerCase().includes(term) ||
-      (row.currency_code || "").toLowerCase().includes(term) ||
-      (row.iso2 || "").toLowerCase().includes(term) ||
-      (row.iso3 || "").toLowerCase().includes(term)
-    );
-  });
+      (row.country_name || '').toLowerCase().includes(term) ||
+      (row.currency_code || '').toLowerCase().includes(term) ||
+      (row.iso2 || '').toLowerCase().includes(term) ||
+      (row.iso3 || '').toLowerCase().includes(term)
+    )
+  })
 
   const computed = filtered.map((row) =>
-    computeRow(row, state.usdPrice, state.usdFloor, state.usdCapMultiplier),
-  );
-  const sorted = sortRows(computed, state.sortBy);
+    computeRow(row, state.usdPrice, state.usdFloor, state.usdCapMultiplier)
+  )
+  const sorted = sortRows(computed, state.sortBy)
 
-  renderTable(sorted, columns);
-  updateSummary(filtered, computed);
+  renderTable(sorted, columns)
+  updateSummary(filtered, computed)
 }
 
-function readParams() {
-  const params = new URLSearchParams(window.location.search);
-  if (params.has("price")) {
-    const price = parseNumber(params.get("price"));
-    if (price !== null) state.usdPrice = price;
+function readParams () {
+  const params = new URLSearchParams(window.location.search)
+  if (params.has('price')) {
+    const price = parseNumber(params.get('price'))
+    if (price !== null) state.usdPrice = price
   }
-  if (params.has("floor")) {
-    const floor = parseNumber(params.get("floor"));
-    if (floor !== null) state.usdFloor = floor;
+  if (params.has('floor')) {
+    const floor = parseNumber(params.get('floor'))
+    if (floor !== null) state.usdFloor = floor
   }
-  if (params.has("cap")) {
-    const cap = parseNumber(params.get("cap"));
-    if (cap !== null) state.usdCapMultiplier = cap;
+  if (params.has('cap')) {
+    const cap = parseNumber(params.get('cap'))
+    if (cap !== null) state.usdCapMultiplier = cap
   }
-  if (params.has("sort")) {
-    const sort = params.get("sort");
-    if (sort && SORT_OPTIONS.has(sort)) state.sortBy = sort;
+  if (params.has('sort')) {
+    const sort = params.get('sort')
+    if (sort && SORT_OPTIONS.has(sort)) state.sortBy = sort
   }
-  if (params.has("search")) {
-    state.search = params.get("search") || "";
+  if (params.has('search')) {
+    state.search = params.get('search') || ''
   }
-  if (params.has("extra")) {
-    const extra = params.get("extra");
-    if (extra === "1" || extra === "true") state.showExtra = true;
-    if (extra === "0" || extra === "false") state.showExtra = false;
+  if (params.has('extra')) {
+    const extra = params.get('extra')
+    if (extra === '1' || extra === 'true') state.showExtra = true
+    if (extra === '0' || extra === 'false') state.showExtra = false
   }
 }
 
-function syncUrl() {
-  const next = buildShareUrl(window.location.pathname);
-  window.history.replaceState(null, "", next);
+function syncUrl () {
+  const next = buildShareUrl(window.location.pathname)
+  window.history.replaceState(null, '', next)
 }
 
-async function init() {
-  const res = await fetch("data/ppp_rates.json");
+async function init () {
+  const res = await fetch('data/ppp_rates.json')
   if (!res.ok) {
-    throw new Error("Failed to load data/ppp_rates.json");
+    throw new Error('Failed to load data/ppp_rates.json')
   }
-  state.data = await res.json();
+  state.data = await res.json()
 
-  readParams();
+  readParams()
 
-  const usdPrice = document.getElementById("usdPrice");
-  const usdFloor = document.getElementById("usdFloor");
-  const capMultiplier = document.getElementById("capMultiplier");
-  const showExtra = document.getElementById("showExtra");
-  const searchInput = document.getElementById("searchInput");
-  const exportYaml = document.getElementById("exportYaml");
-  const exportJson = document.getElementById("exportJson");
-  const themeToggle = document.getElementById("themeToggle");
+  const usdPrice = document.getElementById('usdPrice')
+  const usdFloor = document.getElementById('usdFloor')
+  const capMultiplier = document.getElementById('capMultiplier')
+  const showExtra = document.getElementById('showExtra')
+  const searchInput = document.getElementById('searchInput')
+  const exportYaml = document.getElementById('exportYaml')
+  const exportJson = document.getElementById('exportJson')
+  const themeToggle = document.getElementById('themeToggle')
 
-  usdPrice.value = state.usdPrice;
-  usdFloor.value = state.usdFloor;
-  showExtra.checked = state.showExtra;
-  searchInput.value = state.search;
+  usdPrice.value = state.usdPrice
+  usdFloor.value = state.usdFloor
+  showExtra.checked = state.showExtra
+  searchInput.value = state.search
 
-  usdPrice.addEventListener("input", (event) => {
-    state.usdPrice = parseNumber(event.target.value) || 0;
-    render();
-    syncUrl();
-  });
+  usdPrice.addEventListener('input', (event) => {
+    state.usdPrice = parseNumber(event.target.value) || 0
+    render()
+    syncUrl()
+  })
 
-  usdFloor.addEventListener("input", (event) => {
-    state.usdFloor = parseNumber(event.target.value) || 0;
-    render();
-    syncUrl();
-  });
+  usdFloor.addEventListener('input', (event) => {
+    state.usdFloor = parseNumber(event.target.value) || 0
+    render()
+    syncUrl()
+  })
 
   if (capMultiplier) {
-    capMultiplier.innerHTML = "";
+    capMultiplier.innerHTML = ''
     for (let value = 1; value <= 3.001; value += 0.25) {
-      const option = document.createElement("option");
-      option.value = value.toFixed(2);
-      option.textContent = `${value.toFixed(2)}x`;
+      const option = document.createElement('option')
+      option.value = value.toFixed(2)
+      option.textContent = `${value.toFixed(2)}x`
       if (
         Math.abs(value - state.usdCapMultiplier) < 0.001 ||
         (state.usdCapMultiplier === DEFAULT_CAP_MULTIPLIER &&
           Math.abs(value - DEFAULT_CAP_MULTIPLIER) < 0.001)
       ) {
-        option.selected = true;
+        option.selected = true
       }
-      capMultiplier.appendChild(option);
+      capMultiplier.appendChild(option)
     }
-    capMultiplier.addEventListener("change", (event) => {
-      state.usdCapMultiplier = parseNumber(event.target.value) || 1;
-      render();
-      syncUrl();
-    });
+    capMultiplier.addEventListener('change', (event) => {
+      state.usdCapMultiplier = parseNumber(event.target.value) || 1
+      render()
+      syncUrl()
+    })
     state.usdCapMultiplier =
-      parseNumber(capMultiplier.value) || DEFAULT_CAP_MULTIPLIER;
+      parseNumber(capMultiplier.value) || DEFAULT_CAP_MULTIPLIER
   }
 
-  showExtra.addEventListener("change", (event) => {
-    state.showExtra = event.target.checked;
-    render();
-    syncUrl();
-  });
+  showExtra.addEventListener('change', (event) => {
+    state.showExtra = event.target.checked
+    render()
+    syncUrl()
+  })
 
-  document.getElementById("tableHead").addEventListener("click", (event) => {
-    const target = event.target.closest("th[data-sort]");
-    if (!target) return;
-    const key = target.dataset.sort;
-    if (!SORT_OPTIONS.has(key)) return;
-    state.sortBy = key;
-    render();
-    syncUrl();
-  });
+  document.getElementById('tableHead').addEventListener('click', (event) => {
+    const target = event.target.closest('th[data-sort]')
+    if (!target) return
+    const key = target.dataset.sort
+    if (!SORT_OPTIONS.has(key)) return
+    state.sortBy = key
+    render()
+    syncUrl()
+  })
 
-  searchInput.addEventListener("input", (event) => {
-    state.search = event.target.value.trim();
-    render();
-    syncUrl();
-  });
+  searchInput.addEventListener('input', (event) => {
+    state.search = event.target.value.trim()
+    render()
+    syncUrl()
+  })
 
-  exportYaml.addEventListener("click", () => {
+  exportYaml.addEventListener('click', () => {
     const yaml = buildYaml(
       state.data,
       state.usdPrice,
       state.usdFloor,
-      state.usdCapMultiplier,
-    );
-    downloadFile("currency_ppp.yml", yaml, "text/yaml;charset=utf-8");
-  });
+      state.usdCapMultiplier
+    )
+    downloadFile('currency_ppp.yml', yaml, 'text/yaml;charset=utf-8')
+  })
 
-  exportJson.addEventListener("click", () => {
+  exportJson.addEventListener('click', () => {
     const json = buildJson(
       state.data,
       state.usdPrice,
       state.usdFloor,
-      state.usdCapMultiplier,
-    );
-    downloadFile("currency_ppp.json", json, "application/json;charset=utf-8");
-  });
+      state.usdCapMultiplier
+    )
+    downloadFile('currency_ppp.json', json, 'application/json;charset=utf-8')
+  })
 
   if (themeToggle) {
-    const root = document.documentElement;
-    const saved = localStorage.getItem("theme");
+    const root = document.documentElement
+    const saved = window.localStorage.getItem('theme')
     const prefersDark =
       window.matchMedia &&
-      window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const initial = saved || (prefersDark ? "dark" : "light");
-    root.setAttribute("data-theme", initial);
+      window.matchMedia('(prefers-color-scheme: dark)').matches
+    const initial = saved || (prefersDark ? 'dark' : 'light')
+    root.setAttribute('data-theme', initial)
 
-    themeToggle.addEventListener("click", () => {
-      const current = root.getAttribute("data-theme") || "light";
-      const next = current === "dark" ? "light" : "dark";
-      root.setAttribute("data-theme", next);
-      localStorage.setItem("theme", next);
-    });
+    themeToggle.addEventListener('click', () => {
+      const current = root.getAttribute('data-theme') || 'light'
+      const next = current === 'dark' ? 'light' : 'dark'
+      root.setAttribute('data-theme', next)
+      window.localStorage.setItem('theme', next)
+    })
   }
 
-  render();
-  syncUrl();
+  render()
+  syncUrl()
 }
 
 init().catch((err) => {
-  console.error(err);
-  const body = document.getElementById("tableBody");
+  console.error(err)
+  const body = document.getElementById('tableBody')
   if (body) {
     body.innerHTML =
-      "<tr><td>Failed to load PPP data. Check data/ppp_rates.json.</td></tr>";
+      '<tr><td>Failed to load PPP data. Check data/ppp_rates.json.</td></tr>'
   }
-});
+})
