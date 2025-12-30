@@ -6,6 +6,16 @@
 version: 1
 
 tools:
+  # JavaScript - standard
+  - name: standard
+    include:
+      - "**/*.js"
+    exclude:
+      - "node_modules/**"
+    cmd: npx
+    args: [standard, --fix]
+    check_args: [standard]
+
   # Web files: CSS, Markdown, JSON, YAML, HTML, JS
   - name: prettier
     include:
@@ -15,7 +25,6 @@ tools:
       - "**/*.yaml"
       - "**/*.yml"
       - "**/*.html"
-      - "**/*.js"
     exclude:
       - "tmp/**"
     cmd: npx
