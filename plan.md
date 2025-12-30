@@ -49,9 +49,9 @@
 - Scale:
   - `ppp_scaled = ppp_rate * 1000`
   - `exch_scaled = exchange_rate * 1000`
-- Given inputs `usd_price` and `usd_floor` (with a 1.5x USD cap):
+- Given inputs `usd_price`, `usd_floor`, and `usd_cap_multiplier` (1.0–3.0 in 0.25 steps):
   - `min_ppp_scaled = ceil((usd_floor * exch_scaled) / usd_price)`
-  - `max_ppp_scaled = floor((usd_price * 1.5 * exch_scaled) / usd_price)`
+  - `max_ppp_scaled = floor((usd_price * usd_cap_multiplier * exch_scaled) / usd_price)`
   - `adjusted_ppp_scaled = min(max(ppp_scaled, min_ppp_scaled), max_ppp_scaled)`
   - `adjustment_pct = (adjusted_ppp_scaled / ppp_scaled) - 1`
   - `usd_equiv_raw = (usd_price * ppp_scaled) / exch_scaled`
@@ -63,15 +63,17 @@
 
 ## UI/UX
 
-- Top input panel:
-  - USD price (default 19.00)
-  - USD floor (default 5.00)
-  - Toggle to show/hide extra columns
-  - Export YAML button
+- Hero:
+  - Short PPP explainer, USD price + floor inputs, cap note.
+  - Theme toggle icon in the top-left corner.
+- Table controls (above the table):
+  - Search, sort, and "show extra columns" toggle.
+  - Export section with YAML + JSON buttons.
 - Table:
   - Sticky header with sortable columns (by currency code or country).
-  - Highlight rows where adjustment was applied.
-  - Show last updated dates for PPP and exchange data.
+  - Highlight rows where adjustment or cap is applied.
+- Snapshot (below the table):
+  - Totals for currencies, adjusted, capped, missing, exchange date.
 
 ## YAML Export Format
 
@@ -82,6 +84,10 @@
   - `usd: 1000`
   - `inr: 22883`
 - Export button builds a string and triggers a file download (Blob + `download` attribute).
+
+## JSON Export
+
+- Export full computed dataset with inputs, cap multiplier, and per-row values.
 
 ## Implementation Steps
 

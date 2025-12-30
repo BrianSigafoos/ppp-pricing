@@ -14,22 +14,59 @@
   </head>
   <body>
     <div class="backdrop"></div>
+    <button
+      class="theme-toggle"
+      id="themeToggle"
+      type="button"
+      aria-label="Toggle theme"
+    >
+      <svg class="icon icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="12" r="4" />
+        <path
+          d="M12 2v3M12 19v3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M2 12h3M19 12h3M4.9 19.1l2.1-2.1M17 7l2.1-2.1"
+        />
+      </svg>
+      <svg class="icon icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M21 14.5A8.5 8.5 0 1 1 9.5 3a7 7 0 0 0 11.5 11.5z" />
+      </svg>
+    </button>
     <header class="hero">
       <div class="hero__content">
         <p class="eyebrow">PPP Pricing Toolkit</p>
         <h1>Set fair global pricing with a USD floor.</h1>
         <p class="lede">
-          Load PPP + exchange rates, dial in your USD price, and export a
-          currency PPP YAML in one click.
+          PPP compares local purchasing power to USD so SaaS pricing stays fair
+          and stable across markets. Set a floor, apply a 1.5x cap, and export
+          clean currency rates.
         </p>
         <div class="controls">
           <label class="field">
             <span>USD price</span>
-            <input id="usdPrice" type="number" step="0.01" value="20" min="0" />
+            <input id="usdPrice" type="number" step="0.01" value="19" min="0" />
           </label>
           <label class="field">
             <span>USD floor</span>
             <input id="usdFloor" type="number" step="0.01" value="5" min="0" />
+          </label>
+          <label class="field">
+            <span>Cap multiplier</span>
+            <select id="capMultiplier"></select>
+          </label>
+        </div>
+        <p class="cap-note" id="capNote">Cap: USD equiv &lt;= 1.5x</p>
+      </div>
+    </header>
+
+    <main class="content">
+      <section class="table-toolbar">
+        <div class="toolbar-left">
+          <label class="search">
+            <span>Search</span>
+            <input
+              id="searchInput"
+              type="search"
+              placeholder="Country or currency"
+            />
           </label>
           <label class="field">
             <span>Sort</span>
@@ -40,30 +77,25 @@
               <option value="usd_equiv_adjusted">USD equiv (adj)</option>
             </select>
           </label>
-          <button class="primary" id="exportYaml">Export YAML</button>
-        </div>
-        <div class="toggles">
-          <label
-            ><input id="showExtra" type="checkbox" />Show extra columns</label
-          >
-        </div>
-        <div class="theme-toggle" role="radiogroup" aria-label="Theme">
-          <label class="theme-option">
-            <input type="radio" name="theme" id="theme-system" checked />
-            <span>System</span>
-          </label>
-          <label class="theme-option">
-            <input type="radio" name="theme" id="theme-light" />
-            <span>Light</span>
-          </label>
-          <label class="theme-option">
-            <input type="radio" name="theme" id="theme-dark" />
-            <span>Dark</span>
+          <label class="checkbox">
+            <input id="showExtra" type="checkbox" />Show extra columns
           </label>
         </div>
-        <p class="cap-note">Cap: USD equiv &lt;= 1.5x</p>
-      </div>
-      <div class="hero__summary">
+        <div class="toolbar-right">
+          <div class="export">
+            <span>Export</span>
+            <button class="ghost" id="exportYaml">YAML</button>
+            <button class="ghost" id="exportJson">JSON</button>
+          </div>
+        </div>
+      </section>
+      <section class="table-wrap">
+        <table>
+          <thead id="tableHead"></thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </section>
+      <section class="snapshot">
         <div class="summary-card">
           <h2>Snapshot</h2>
           <div class="summary-grid">
@@ -76,6 +108,10 @@
               <p class="summary-value" id="countAdjusted">0</p>
             </div>
             <div>
+              <p class="summary-label">Capped</p>
+              <p class="summary-value" id="countCapped">0</p>
+            </div>
+            <div>
               <p class="summary-label">Missing rates</p>
               <p class="summary-value" id="countMissing">0</p>
             </div>
@@ -85,36 +121,19 @@
             </div>
           </div>
         </div>
-        <label class="search">
-          <span>Search</span>
-          <input
-            id="searchInput"
-            type="search"
-            placeholder="Country or currency"
-          />
-        </label>
         <div class="note" id="duplicateNote"></div>
-      </div>
-    </header>
-
-    <main class="content">
-      <section class="table-wrap">
-        <table>
-          <thead id="tableHead"></thead>
-          <tbody id="tableBody"></tbody>
-        </table>
       </section>
     </main>
 
     <footer class="footer">
-      <div>
-        <strong>PPP source:</strong> World Bank.
-        <strong>Exchange source:</strong>
-        open.er-api.com (USD base) by default.
+      <div class="footer__links">
+        Built by <a href="https://briansigafoos.com">Brian Sigafoos</a> ·
+        <a href="https://github.com/BrianSigafoos/ppp-pricing">GitHub</a> ·
+        <a href="https://tools.bfoos.net">More tools</a>
       </div>
-      <div>
-        Update data with <code>node scripts/refresh_data.js</code> and commit
-        the refreshed <code>docs/data/ppp_rates.json</code>.
+      <div class="footer__meta">
+        PPP source: World Bank · Exchange source: open.er-api.com (USD base) ·
+        Refresh with <code>node scripts/refresh_data.js</code>
       </div>
     </footer>
 

@@ -2,12 +2,13 @@ const state = {
   data: [],
   usdPrice: 19,
   usdFloor: 5,
+  usdCapMultiplier: 1.5,
   showExtra: false,
   sortBy: "currency_code",
   search: "",
 };
 
-const USD_CAP_MULTIPLIER = 1.5;
+const DEFAULT_CAP_MULTIPLIER = 1.5;
 
 const formatters = {
   rate: new Intl.NumberFormat("en-US", {
@@ -53,7 +54,7 @@ function parseNumber(value) {
   return Number.isFinite(num) ? num : null;
 }
 
-function computeRow(row, usdPrice, usdFloor) {
+function computeRow(row, usdPrice, usdFloor, usdCapMultiplier) {
   const pppRate = parseNumber(row.ppp_rate);
   const exchRate = parseNumber(row.exchange_rate);
   const valid =
@@ -81,7 +82,7 @@ function computeRow(row, usdPrice, usdFloor) {
   const exchScaled = exchRate * 1000;
   const minPppScaled = Math.ceil((usdFloor * exchScaled) / usdPrice);
   const capPppScaled = Math.floor(
-    (usdPrice * USD_CAP_MULTIPLIER * exchScaled) / usdPrice,
+    (usdPrice * usdCapMultiplier * exchScaled) / usdPrice,
   );
   const adjustedPppScaled = Math.max(pppScaledRounded, minPppScaled);
   const finalPppScaled = Math.min(adjustedPppScaled, capPppScaled);
@@ -127,7 +128,7 @@ function buildColumns(showExtra) {
     },
     {
       key: "adjusted_ppp_scaled",
-      label: "Adjusted PPP",
+      label: "Adjusted PPP rate",
       format: (v) => formatValue(v, formatters.integer),
     },
     {
@@ -224,12 +225,14 @@ function getDuplicateNote(data) {
 function updateSummary(rows, computed) {
   const total = computed.length;
   const adjusted = computed.filter((row) => row.isAdjusted).length;
+  const capped = computed.filter((row) => row.isCapped).length;
   const missing = computed.filter((row) => row.isMissing).length;
   const exchangeDate =
     rows.find((row) => row.exchange_rate_date)?.exchange_rate_date || "-";
 
   document.getElementById("countTotal").textContent = total;
   document.getElementById("countAdjusted").textContent = adjusted;
+  document.getElementById("countCapped").textContent = capped;
   document.getElementById("countMissing").textContent = missing;
   document.getElementById("exchangeDate").textContent = exchangeDate;
   const note = getDuplicateNote(rows);
@@ -238,9 +241,9 @@ function updateSummary(rows, computed) {
   noteEl.style.display = note ? "block" : "none";
 }
 
-function buildYaml(rows, usdPrice, usdFloor) {
+function buildYaml(rows, usdPrice, usdFloor, usdCapMultiplier) {
   const computed = rows
-    .map((row) => computeRow(row, usdPrice, usdFloor))
+    .map((row) => computeRow(row, usdPrice, usdFloor, usdCapMultiplier))
     .filter((row) => !row.isMissing)
     .sort(
       (a, b) =>
@@ -258,7 +261,7 @@ function buildYaml(rows, usdPrice, usdFloor) {
   const lines = [
     `# Generated ${new Date().toISOString().slice(0, 10)}`,
     `# USD price: ${usdPrice}, USD floor: ${usdFloor}`,
-    `# USD cap multiplier: ${USD_CAP_MULTIPLIER}x`,
+    `# USD cap multiplier: ${usdCapMultiplier}x`,
   ];
   for (const [code, value] of deduped.entries()) {
     lines.push(`${code}: ${value}`);
@@ -266,8 +269,23 @@ function buildYaml(rows, usdPrice, usdFloor) {
   return `${lines.join("\n")}\n`;
 }
 
-function downloadFile(filename, content) {
-  const blob = new Blob([content], { type: "text/yaml;charset=utf-8" });
+function buildJson(rows, usdPrice, usdFloor, usdCapMultiplier) {
+  const computed = rows.map((row) =>
+    computeRow(row, usdPrice, usdFloor, usdCapMultiplier),
+  );
+  const payload = {
+    generated_at: new Date().toISOString(),
+    usd_price: usdPrice,
+    usd_floor: usdFloor,
+    usd_cap_multiplier: usdCapMultiplier,
+    rows: computed,
+  };
+  return `${JSON.stringify(payload, null, 2)}\n`;
+}
+
+function downloadFile(filename, content, type) {
+  const mimeType = type || "text/plain;charset=utf-8";
+  const blob = new Blob([content], { type: mimeType });
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
@@ -292,12 +310,17 @@ function render() {
   });
 
   const computed = filtered.map((row) =>
-    computeRow(row, state.usdPrice, state.usdFloor),
+    computeRow(row, state.usdPrice, state.usdFloor, state.usdCapMultiplier),
   );
   const sorted = sortRows(computed, state.sortBy);
 
   renderTable(sorted, columns);
   updateSummary(filtered, computed);
+
+  const capNote = document.getElementById("capNote");
+  if (capNote) {
+    capNote.textContent = `Cap: USD equiv <= ${state.usdCapMultiplier.toFixed(2)}x`;
+  }
 }
 
 async function init() {
@@ -309,10 +332,13 @@ async function init() {
 
   const usdPrice = document.getElementById("usdPrice");
   const usdFloor = document.getElementById("usdFloor");
+  const capMultiplier = document.getElementById("capMultiplier");
   const showExtra = document.getElementById("showExtra");
   const sortBy = document.getElementById("sortBy");
   const searchInput = document.getElementById("searchInput");
   const exportYaml = document.getElementById("exportYaml");
+  const exportJson = document.getElementById("exportJson");
+  const themeToggle = document.getElementById("themeToggle");
 
   usdPrice.addEventListener("input", (event) => {
     state.usdPrice = parseNumber(event.target.value) || 0;
@@ -323,6 +349,25 @@ async function init() {
     state.usdFloor = parseNumber(event.target.value) || 0;
     render();
   });
+
+  if (capMultiplier) {
+    capMultiplier.innerHTML = "";
+    for (let value = 1; value <= 3.001; value += 0.25) {
+      const option = document.createElement("option");
+      option.value = value.toFixed(2);
+      option.textContent = `${value.toFixed(2)}x`;
+      if (Math.abs(value - DEFAULT_CAP_MULTIPLIER) < 0.001) {
+        option.selected = true;
+      }
+      capMultiplier.appendChild(option);
+    }
+    capMultiplier.addEventListener("change", (event) => {
+      state.usdCapMultiplier = parseNumber(event.target.value) || 1;
+      render();
+    });
+    state.usdCapMultiplier =
+      parseNumber(capMultiplier.value) || DEFAULT_CAP_MULTIPLIER;
+  }
 
   showExtra.addEventListener("change", (event) => {
     state.showExtra = event.target.checked;
@@ -340,9 +385,41 @@ async function init() {
   });
 
   exportYaml.addEventListener("click", () => {
-    const yaml = buildYaml(state.data, state.usdPrice, state.usdFloor);
-    downloadFile("currency_ppp.yml", yaml);
+    const yaml = buildYaml(
+      state.data,
+      state.usdPrice,
+      state.usdFloor,
+      state.usdCapMultiplier,
+    );
+    downloadFile("currency_ppp.yml", yaml, "text/yaml;charset=utf-8");
   });
+
+  exportJson.addEventListener("click", () => {
+    const json = buildJson(
+      state.data,
+      state.usdPrice,
+      state.usdFloor,
+      state.usdCapMultiplier,
+    );
+    downloadFile("currency_ppp.json", json, "application/json;charset=utf-8");
+  });
+
+  if (themeToggle) {
+    const root = document.documentElement;
+    const saved = localStorage.getItem("theme");
+    const prefersDark =
+      window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const initial = saved || (prefersDark ? "dark" : "light");
+    root.setAttribute("data-theme", initial);
+
+    themeToggle.addEventListener("click", () => {
+      const current = root.getAttribute("data-theme") || "light";
+      const next = current === "dark" ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      localStorage.setItem("theme", next);
+    });
+  }
 
   render();
 }

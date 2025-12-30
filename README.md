@@ -1,7 +1,7 @@
 # PPP Pricing Calculator
 
-Static site to compute PPP-adjusted pricing with a USD floor, apply a 1.5x USD
-cap, and export a `currency_ppp.yml` file.
+Static site to compute PPP-adjusted pricing with a USD floor, apply a configurable
+USD cap (1x–3x), and export `currency_ppp.yml` or JSON.
 
 ## Quick start
 
@@ -36,3 +36,7 @@ node scripts/refresh_data.js --save-raw
 - Use the "Export YAML" button in the UI.
 - The export de-dupes currencies and keeps the first country per currency
   (alphabetical by country name).
+
+## JSON export
+
+- Use the "Export JSON" button to download the full computed dataset.
