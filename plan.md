@@ -64,16 +64,15 @@
 ## UI/UX
 
 - Hero:
-  - Short PPP explainer, USD price + floor inputs, cap note.
+  - Short PPP explainer, USD price + floor inputs, cap selector.
   - Theme toggle icon in the top-left corner.
 - Table controls (above the table):
   - Search, sort, and "show extra columns" toggle.
   - Export section with YAML + JSON buttons.
+  - Snapshot shown inline as compact stat pills.
 - Table:
   - Sticky header with sortable columns (by currency code or country).
   - Highlight rows where adjustment or cap is applied.
-- Snapshot (below the table):
-  - Totals for currencies, adjusted, capped, missing, exchange date.
 
 ## YAML Export Format
 
