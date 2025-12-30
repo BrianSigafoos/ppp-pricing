@@ -237,6 +237,10 @@ function renderTable (rows, columns) {
           if (col.key === 'currency_code' && value) {
             value = value.toUpperCase()
           }
+          const isZeroAdjustment =
+            col.key === 'adjustment_pct' &&
+            typeof value === 'number' &&
+            Math.abs(value) < 1e-6
           const text = col.format
             ? col.format(value, row)
             : value === null || value === undefined || value === ''
@@ -247,7 +251,11 @@ function renderTable (rows, columns) {
             col.key === 'currency_code' ? 'pill' : '',
             col.key === 'adjusted_ppp_rate' && !row.isAdjusted
               ? 'is-muted'
-              : ''
+              : '',
+            col.key === 'adjusted_ppp_rate' && row.isAdjusted
+              ? 'is-adjusted-value'
+              : '',
+            isZeroAdjustment ? 'is-muted' : ''
           ]
             .filter(Boolean)
             .join(' ')
