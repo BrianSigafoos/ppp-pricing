@@ -10,7 +10,6 @@
   --surface: rgba(255, 255, 255, 0.92);
   --surface-solid: #fff;
   --shadow: 0 20px 50px rgba(31, 31, 36, 0.14);
-  --primary-shadow: 0 14px 28px rgba(255, 107, 44, 0.28);
   --border: rgba(31, 31, 36, 0.18);
   --border-soft: rgba(31, 31, 36, 0.1);
   --table-head: var(--clay);
@@ -48,7 +47,6 @@ html[data-theme="dark"] {
   --surface: rgba(18, 15, 12, 0.92);
   --surface-solid: #171310;
   --shadow: 0 26px 70px rgba(0, 0, 0, 0.66);
-  --primary-shadow: 0 18px 34px rgba(0, 0, 0, 0.6);
   --border: rgba(246, 244, 240, 0.16);
   --border-soft: rgba(246, 244, 240, 0.08);
   --table-head: #18130f;
@@ -160,24 +158,6 @@ select {
   color: var(--ink);
 }
 
-.primary {
-  background: var(--forest);
-  color: #fff;
-  border: none;
-  padding: 12px 16px;
-  border-radius: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
-  box-shadow: var(--primary-shadow);
-}
-
-.primary:hover {
-  transform: translateY(-2px);
-}
-
 .theme-toggle {
   position: fixed;
   top: 20px;
@@ -216,33 +196,6 @@ html[data-theme="dark"] .theme-toggle .icon-sun {
 
 html[data-theme="dark"] .theme-toggle .icon-moon {
   display: block;
-}
-
-.summary-card {
-  background: var(--surface);
-  border-radius: 24px;
-  padding: 24px;
-  border: 1px solid var(--border-soft);
-  box-shadow: var(--shadow);
-}
-
-.summary-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 16px;
-  margin-top: 12px;
-}
-
-.summary-label {
-  margin: 0;
-  color: var(--ink-soft);
-  font-size: 0.85rem;
-}
-
-.summary-value {
-  margin: 4px 0 0;
-  font-size: 1.3rem;
-  font-weight: 600;
 }
 
 .search {
@@ -453,7 +406,6 @@ tbody tr.is-missing {
     padding: 40px 6vw 20px;
   }
   .hero__content,
-  .summary-card,
   .table-wrap,
   .table-toolbar {
     border-radius: 20px;

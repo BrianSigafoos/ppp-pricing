@@ -45,7 +45,17 @@ const formatters = {
   })
 }
 
+const stringCollator = new Intl.Collator('en', { sensitivity: 'base' })
 const currencyFormatterCache = new Map()
+
+function escapeHtml (value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+}
 
 function formatCurrency (value, currencyCode) {
   if (value === null || value === undefined || Number.isNaN(value)) return '-'
@@ -92,12 +102,15 @@ function computeRow (row, usdPrice, usdFloor, usdCapMultiplier) {
       ...row,
       isMissing: true,
       isAdjusted: false,
+      isCapped: false,
       ppp_scaled_raw: null,
       ppp_scaled_rounded: null,
       adjusted_ppp_scaled: null,
+      adjusted_ppp_rate: null,
       adjustment_pct: null,
       usd_equiv_raw: null,
-      usd_equiv_adjusted: null
+      usd_equiv_adjusted: null,
+      cap_ppp_scaled: null
     }
   }
 
@@ -105,9 +118,7 @@ function computeRow (row, usdPrice, usdFloor, usdCapMultiplier) {
   const pppScaledRounded = Math.ceil(pppScaledRaw)
   const exchScaled = exchRate * 1000
   const minPppScaled = Math.ceil((usdFloor * exchScaled) / usdPrice)
-  const capPppScaled = Math.floor(
-    (usdPrice * usdCapMultiplier * exchScaled) / usdPrice
-  )
+  const capPppScaled = Math.floor(usdCapMultiplier * exchScaled)
   const adjustedPppScaled = Math.max(pppScaledRounded, minPppScaled)
   const finalPppScaled = Math.min(adjustedPppScaled, capPppScaled)
   const adjustmentPct =
@@ -231,6 +242,7 @@ function renderTable (rows, columns) {
             : value === null || value === undefined || value === ''
               ? '-'
               : value
+          const safeText = escapeHtml(text)
           const cellClasses = [
             col.key === 'currency_code' ? 'pill' : '',
             col.key === 'adjusted_ppp_rate' && !row.isAdjusted
@@ -240,13 +252,17 @@ function renderTable (rows, columns) {
             .filter(Boolean)
             .join(' ')
           if (cellClasses) {
-            return `<td><span class="${cellClasses}">${text}</span></td>`
+            return `<td><span class="${cellClasses}">${safeText}</span></td>`
           }
-          return `<td>${text}</td>`
+          return `<td>${safeText}</td>`
         })
         .join('')}</tr>`
     })
     .join('')
+}
+
+function isMissingValue (value) {
+  return value === null || value === undefined || Number.isNaN(value)
 }
 
 function sortRows (rows, sortBy) {
@@ -254,10 +270,15 @@ function sortRows (rows, sortBy) {
   sorted.sort((a, b) => {
     const valA = a[sortBy]
     const valB = b[sortBy]
+    const missingA = isMissingValue(valA)
+    const missingB = isMissingValue(valB)
+    if (missingA && missingB) return 0
+    if (missingA) return 1
+    if (missingB) return -1
     if (typeof valA === 'number' && typeof valB === 'number') {
       return valB - valA
     }
-    return String(valA || '').localeCompare(String(valB || ''))
+    return stringCollator.compare(String(valA), String(valB))
   })
   return sorted
 }
@@ -275,19 +296,20 @@ function getDuplicateNote (data) {
 }
 
 function updateSummary (rows, computed) {
+  const summaryRows = state.data.length ? state.data : rows
   const total = computed.length
   const adjusted = computed.filter((row) => row.isAdjusted).length
   const capped = computed.filter((row) => row.isCapped).length
   const missing = computed.filter((row) => row.isMissing).length
   const exchangeDate =
-    rows.find((row) => row.exchange_rate_date)?.exchange_rate_date || '-'
+    summaryRows.find((row) => row.exchange_rate_date)?.exchange_rate_date || '-'
 
   document.getElementById('countTotal').textContent = total
   document.getElementById('countAdjusted').textContent = adjusted
   document.getElementById('countCapped').textContent = capped
   document.getElementById('countMissing').textContent = missing
   document.getElementById('exchangeDate').textContent = exchangeDate
-  const note = getDuplicateNote(rows)
+  const note = getDuplicateNote(summaryRows)
   const noteEl = document.getElementById('duplicateNote')
   noteEl.textContent = note
   noteEl.style.display = note ? 'block' : 'none'
@@ -305,7 +327,8 @@ function buildShareUrl (baseUrl) {
     params.set('cap', state.usdCapMultiplier.toFixed(2))
   }
   if (state.sortBy !== DEFAULT_SORT) params.set('sort', state.sortBy)
-  if (state.search) params.set('search', state.search)
+  const search = state.search.trim()
+  if (search) params.set('search', search)
   if (state.showExtra) params.set('extra', '1')
   const query = params.toString()
   const base = baseUrl || window.location.pathname
@@ -370,16 +393,17 @@ function downloadFile (filename, content, type) {
 
 function render () {
   const columns = buildColumns(state.showExtra)
-  const filtered = state.data.filter((row) => {
-    if (!state.search) return true
-    const term = state.search.toLowerCase()
-    return (
-      (row.country_name || '').toLowerCase().includes(term) ||
-      (row.currency_code || '').toLowerCase().includes(term) ||
-      (row.iso2 || '').toLowerCase().includes(term) ||
-      (row.iso3 || '').toLowerCase().includes(term)
-    )
-  })
+  const term = state.search.trim().toLowerCase()
+  const filtered = term
+    ? state.data.filter((row) => {
+      return (
+        (row.country_name || '').toLowerCase().includes(term) ||
+          (row.currency_code || '').toLowerCase().includes(term) ||
+          (row.iso2 || '').toLowerCase().includes(term) ||
+          (row.iso3 || '').toLowerCase().includes(term)
+      )
+    })
+    : state.data
 
   const computed = filtered.map((row) =>
     computeRow(row, state.usdPrice, state.usdFloor, state.usdCapMultiplier)
@@ -409,7 +433,7 @@ function readParams () {
     if (sort && SORT_OPTIONS.has(sort)) state.sortBy = sort
   }
   if (params.has('search')) {
-    state.search = params.get('search') || ''
+    state.search = (params.get('search') || '').trim()
   }
   if (params.has('extra')) {
     const extra = params.get('extra')
@@ -531,13 +555,22 @@ async function init () {
       window.matchMedia &&
       window.matchMedia('(prefers-color-scheme: dark)').matches
     const initial = saved || (prefersDark ? 'dark' : 'light')
-    root.setAttribute('data-theme', initial)
+
+    const applyTheme = (theme, persist) => {
+      root.setAttribute('data-theme', theme)
+      themeToggle.setAttribute(
+        'aria-pressed',
+        theme === 'dark' ? 'true' : 'false'
+      )
+      if (persist) window.localStorage.setItem('theme', theme)
+    }
+
+    applyTheme(initial, false)
 
     themeToggle.addEventListener('click', () => {
       const current = root.getAttribute('data-theme') || 'light'
       const next = current === 'dark' ? 'light' : 'dark'
-      root.setAttribute('data-theme', next)
-      window.localStorage.setItem('theme', next)
+      applyTheme(next, true)
     })
   }
 
