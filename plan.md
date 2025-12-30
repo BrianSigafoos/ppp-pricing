@@ -57,7 +57,9 @@
   - `usd_equiv_raw = (usd_price * ppp_scaled) / exch_scaled`
   - `usd_equiv_adjusted = (usd_price * adjusted_ppp_scaled) / exch_scaled`
 - Display these columns in the UI:
-  - `ppp_rate`, `exchange_rate`, `ppp_scaled`, `adjustment_pct`, `adjusted_ppp_scaled`, `usd_equiv_raw`, `usd_equiv_adjusted`.
+  - `country_name`, `currency_code`, `ppp_rate`, `exchange_rate`, `adjusted_ppp_scaled`, `adjustment_pct`, `currency_price`, `usd_equiv_adjusted`.
+- Extra columns toggle:
+  - `ppp_year`, `ppp_source`, `exchange_rate_date`, `exchange_rate_source`.
 
 ## UI/UX
 

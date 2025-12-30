@@ -2,8 +2,7 @@ const state = {
   data: [],
   usdPrice: 19,
   usdFloor: 5,
-  showExtra: true,
-  showMeta: false,
+  showExtra: false,
   sortBy: "currency_code",
   search: "",
 };
@@ -16,9 +15,9 @@ const formatters = {
     maximumFractionDigits: 4,
   }),
   integer: new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 }),
-  usd: new Intl.NumberFormat("en-US", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
+  usd: new Intl.NumberFormat("en", {
+    style: "currency",
+    currency: "USD",
   }),
   percent: new Intl.NumberFormat("en-US", {
     style: "percent",
@@ -26,6 +25,28 @@ const formatters = {
     maximumFractionDigits: 1,
   }),
 };
+
+const currencyFormatterCache = new Map();
+
+function formatCurrency(value, currencyCode) {
+  if (value === null || value === undefined || Number.isNaN(value)) return "-";
+  if (!currencyCode) return formatters.usd.format(value);
+  const code = currencyCode.toUpperCase();
+  if (!currencyFormatterCache.has(code)) {
+    try {
+      currencyFormatterCache.set(
+        code,
+        new Intl.NumberFormat("en", {
+          style: "currency",
+          currency: code,
+        }),
+      );
+    } catch (error) {
+      currencyFormatterCache.set(code, formatters.usd);
+    }
+  }
+  return currencyFormatterCache.get(code).format(value);
+}
 
 function parseNumber(value) {
   const num = Number(value);
@@ -78,6 +99,7 @@ function computeRow(row, usdPrice, usdFloor) {
     ppp_scaled_rounded: pppScaledRounded,
     adjusted_ppp_scaled: finalPppScaled,
     adjustment_pct: adjustmentPct,
+    currency_price: (usdPrice * finalPppScaled) / 1000,
     usd_equiv_raw: usdEquivRaw,
     usd_equiv_adjusted: usdEquivAdjusted,
     cap_ppp_scaled: capPppScaled,
@@ -89,10 +111,9 @@ function formatValue(value, formatter) {
   return formatter.format(value);
 }
 
-function buildColumns(showExtra, showMeta) {
+function buildColumns(showExtra) {
   const base = [
     { key: "country_name", label: "Country" },
-    { key: "iso3", label: "ISO3" },
     { key: "currency_code", label: "Currency" },
     {
       key: "ppp_rate",
@@ -104,28 +125,20 @@ function buildColumns(showExtra, showMeta) {
       label: "Exchange rate",
       format: (v) => formatValue(v, formatters.rate),
     },
-  ];
-
-  const extra = [
-    {
-      key: "ppp_scaled_rounded",
-      label: "PPP scaled",
-      format: (v) => formatValue(v, formatters.integer),
-    },
-    {
-      key: "adjustment_pct",
-      label: "Adjustment",
-      format: (v) => (v === null ? "-" : formatters.percent.format(v)),
-    },
     {
       key: "adjusted_ppp_scaled",
       label: "Adjusted PPP",
       format: (v) => formatValue(v, formatters.integer),
     },
     {
-      key: "usd_equiv_raw",
-      label: "USD equiv (raw)",
-      format: (v) => formatValue(v, formatters.usd),
+      key: "adjustment_pct",
+      label: "Adjustment %",
+      format: (v) => (v === null ? "-" : formatters.percent.format(v)),
+    },
+    {
+      key: "currency_price",
+      label: "Currency price",
+      format: (v, row) => formatCurrency(v, row.currency_code),
     },
     {
       key: "usd_equiv_adjusted",
@@ -134,14 +147,17 @@ function buildColumns(showExtra, showMeta) {
     },
   ];
 
-  const meta = [
-    { key: "ppp_year", label: "PPP year" },
+  const extra = [
+    {
+      key: "ppp_year",
+      label: "PPP year",
+    },
     { key: "ppp_source", label: "PPP source" },
     { key: "exchange_rate_date", label: "FX date" },
     { key: "exchange_rate_source", label: "FX source" },
   ];
 
-  return base.concat(showExtra ? extra : []).concat(showMeta ? meta : []);
+  return base.concat(showExtra ? extra : []);
 }
 
 function renderTable(rows, columns) {
@@ -168,7 +184,7 @@ function renderTable(rows, columns) {
             value = value.toUpperCase();
           }
           const text = col.format
-            ? col.format(value)
+            ? col.format(value, row)
             : value === null || value === undefined || value === ""
               ? "-"
               : value;
@@ -263,7 +279,7 @@ function downloadFile(filename, content) {
 }
 
 function render() {
-  const columns = buildColumns(state.showExtra, state.showMeta);
+  const columns = buildColumns(state.showExtra);
   const filtered = state.data.filter((row) => {
     if (!state.search) return true;
     const term = state.search.toLowerCase();
@@ -294,7 +310,6 @@ async function init() {
   const usdPrice = document.getElementById("usdPrice");
   const usdFloor = document.getElementById("usdFloor");
   const showExtra = document.getElementById("showExtra");
-  const showMeta = document.getElementById("showMeta");
   const sortBy = document.getElementById("sortBy");
   const searchInput = document.getElementById("searchInput");
   const exportYaml = document.getElementById("exportYaml");
@@ -311,11 +326,6 @@ async function init() {
 
   showExtra.addEventListener("change", (event) => {
     state.showExtra = event.target.checked;
-    render();
-  });
-
-  showMeta.addEventListener("change", (event) => {
-    state.showMeta = event.target.checked;
     render();
   });
 
