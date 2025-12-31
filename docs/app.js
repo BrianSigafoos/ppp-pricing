@@ -300,7 +300,17 @@ function getDuplicateNote (data) {
   })
   const duplicates = Object.entries(counts).filter(([, count]) => count > 1)
   if (!duplicates.length) return ''
-  return `Duplicate currencies: ${duplicates.length}. YAML export keeps the first country per currency (alphabetical).`
+  return `Duplicate currencies: ${duplicates.length}. YAML export uses the median adjusted PPP per currency.`
+}
+
+function updateStripeCurrencyCount (rows) {
+  const stripeCountEl = document.getElementById('stripeCurrencyCount')
+  if (!stripeCountEl) return
+  const currencies = new Set()
+  rows.forEach((row) => {
+    if (row.currency_code) currencies.add(row.currency_code.toLowerCase())
+  })
+  stripeCountEl.textContent = currencies.size
 }
 
 function updateSummary (rows, computed) {
@@ -321,6 +331,7 @@ function updateSummary (rows, computed) {
   const noteEl = document.getElementById('duplicateNote')
   noteEl.textContent = note
   noteEl.style.display = note ? 'block' : 'none'
+  updateStripeCurrencyCount(summaryRows)
 }
 
 function buildShareUrl (baseUrl) {
@@ -347,18 +358,18 @@ function buildYaml (rows, usdPrice, usdFloor, usdCapMultiplier) {
   const computed = rows
     .map((row) => computeRow(row, usdPrice, usdFloor, usdCapMultiplier))
     .filter((row) => !row.isMissing)
-    .sort(
-      (a, b) =>
-        a.currency_code.localeCompare(b.currency_code) ||
-        a.country_name.localeCompare(b.country_name)
-    )
 
-  const deduped = new Map()
+  const grouped = new Map()
   for (const row of computed) {
+    if (!row.currency_code) continue
     const code = row.currency_code.toLowerCase()
-    if (deduped.has(code)) continue
-    deduped.set(code, row.adjusted_ppp_scaled)
+    if (!grouped.has(code)) grouped.set(code, [])
+    grouped.get(code).push(row.adjusted_ppp_scaled)
   }
+
+  const entries = [...grouped.entries()].sort((a, b) =>
+    a[0].localeCompare(b[0])
+  )
 
   const lines = [
     `# Generated ${new Date().toISOString().slice(0, 10)}`,
@@ -366,8 +377,15 @@ function buildYaml (rows, usdPrice, usdFloor, usdCapMultiplier) {
     `# USD cap multiplier: ${usdCapMultiplier}x`,
     `# Source: ${buildShareUrl(SHARE_BASE_URL)}`
   ]
-  for (const [code, value] of deduped.entries()) {
-    lines.push(`${code}: ${value}`)
+
+  for (const [code, values] of entries) {
+    const sorted = values.slice().sort((a, b) => a - b)
+    const mid = Math.floor(sorted.length / 2)
+    const median =
+      sorted.length % 2 === 1
+        ? sorted[mid]
+        : Math.round((sorted[mid - 1] + sorted[mid]) / 2)
+    lines.push(`${code}: ${median}`)
   }
   return `${lines.join('\n')}\n`
 }
@@ -461,6 +479,7 @@ async function init () {
     throw new Error('Failed to load data/ppp_rates.json')
   }
   state.data = await res.json()
+  updateStripeCurrencyCount(state.data)
 
   readParams()
 

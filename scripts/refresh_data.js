@@ -8,6 +8,15 @@ const DEFAULT_RAW_DIR = 'data/raw'
 
 const USER_AGENT = 'ppp-pricing-refresh/1.0'
 
+const EXCHANGE_RATE_FALLBACKS = {
+  MRU: ['MRO'],
+  MRO: ['MRU'],
+  SLE: ['SLL'],
+  SLL: ['SLE'],
+  STN: ['STD'],
+  STD: ['STN']
+}
+
 const WB_URL =
   'https://api.worldbank.org/v2/country/all/indicator/PA.NUS.PPP?format=json&per_page=20000'
 const ECB_URL = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml'
@@ -222,8 +231,16 @@ async function main () {
     const currencyCode = entry.currency_code || null
     const currencyKey =
       typeof currencyCode === 'string' ? currencyCode.toUpperCase() : null
-    const exchRate =
+    let exchRate =
       currencyKey && usdRates[currencyKey] ? usdRates[currencyKey] : null
+    if (!exchRate && currencyKey && EXCHANGE_RATE_FALLBACKS[currencyKey]) {
+      for (const fallback of EXCHANGE_RATE_FALLBACKS[currencyKey]) {
+        if (usdRates[fallback]) {
+          exchRate = usdRates[fallback]
+          break
+        }
+      }
+    }
     if (!exchRate) missingExch++
 
     rows.push({
