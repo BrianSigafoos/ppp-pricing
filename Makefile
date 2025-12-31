@@ -3,3 +3,6 @@ serve:
 
 refresh:
 	node scripts/refresh_data.js
+
+test:
+	node scripts/test_yaml.js

@@ -33,6 +33,12 @@ node scripts/refresh_data.js --exchange-source ecb
 node scripts/refresh_data.js --save-raw
 ```
 
+## Tests
+
+```
+make test
+```
+
 ## Compare with Stripe country specs
 
 Provide a Stripe country specs JSON response or set `STRIPE_API_KEY` (loaded from

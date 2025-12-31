@@ -13,8 +13,11 @@ make serve
 
 # Refresh PPP + exchange rates
 make refresh
-
 ```
+
+## Formatting
+
+Run `ffx` to auto-format all files after every code change. Don't manually format code.
 
 ## Data Refresh Notes
 
@@ -28,3 +31,4 @@ make refresh
 - Maintain provenance fields for PPP and exchange rates per currency.
 - Ability to export as YAML: `currency_ppp.yml`.
 - Enforce the 1.5x USD cap when calculating adjusted PPP values.
+- Add tests for any changes or new features.
