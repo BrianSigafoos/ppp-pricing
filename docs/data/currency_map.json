@@ -23,6 +23,12 @@
     "iso2": "AL",
     "iso3": "ALB"
   },
+  "AND": {
+    "country_name": "Andorra",
+    "currency_code": "eur",
+    "iso2": "AD",
+    "iso3": "AND"
+  },
   "ARE": {
     "country_name": "United Arab Emirates",
     "currency_code": "aed",
@@ -41,11 +47,23 @@
     "iso2": "AM",
     "iso3": "ARM"
   },
+  "ATG": {
+    "country_name": "Antigua and Barbuda",
+    "currency_code": "xcd",
+    "iso2": "AG",
+    "iso3": "ATG"
+  },
   "AUS": {
     "country_name": "Australia",
     "currency_code": "aud",
     "iso2": "AU",
     "iso3": "AUS"
+  },
+  "AUT": {
+    "country_name": "Austria",
+    "currency_code": "eur",
+    "iso2": "AT",
+    "iso3": "AUT"
   },
   "AZE": {
     "country_name": "Azerbaijan",
@@ -58,6 +76,18 @@
     "currency_code": "bif",
     "iso2": "BI",
     "iso3": "BDI"
+  },
+  "BEL": {
+    "country_name": "Belgium",
+    "currency_code": "eur",
+    "iso2": "BE",
+    "iso3": "BEL"
+  },
+  "BEN": {
+    "country_name": "Benin",
+    "currency_code": "xof",
+    "iso2": "BJ",
+    "iso3": "BEN"
   },
   "BGD": {
     "country_name": "Bangladesh",
@@ -82,6 +112,12 @@
     "currency_code": "bam",
     "iso2": "BA",
     "iso3": "BIH"
+  },
+  "BLR": {
+    "country_name": "Belarus",
+    "currency_code": "byn",
+    "iso2": "BY",
+    "iso3": "BLR"
   },
   "BLZ": {
     "country_name": "Belize",
@@ -203,11 +239,23 @@
     "iso2": "KY",
     "iso3": "CYM"
   },
+  "CYP": {
+    "country_name": "Cyprus",
+    "currency_code": "eur",
+    "iso2": "CY",
+    "iso3": "CYP"
+  },
   "CZE": {
     "country_name": "Czech Republic",
     "currency_code": "czk",
     "iso2": "CZ",
     "iso3": "CZE"
+  },
+  "DEU": {
+    "country_name": "Germany",
+    "currency_code": "eur",
+    "iso2": "DE",
+    "iso3": "DEU"
   },
   "DJI": {
     "country_name": "Djibouti",
@@ -239,11 +287,29 @@
     "iso2": "DZ",
     "iso3": "DZA"
   },
+  "ECU": {
+    "country_name": "Ecuador",
+    "currency_code": "usd",
+    "iso2": "EC",
+    "iso3": "ECU"
+  },
   "EGY": {
     "country_name": "Egypt, Arab Rep.",
     "currency_code": "egp",
     "iso2": "EG",
     "iso3": "EGY"
+  },
+  "ESP": {
+    "country_name": "Spain",
+    "currency_code": "eur",
+    "iso2": "ES",
+    "iso3": "ESP"
+  },
+  "EST": {
+    "country_name": "Estonia",
+    "currency_code": "eur",
+    "iso2": "EE",
+    "iso3": "EST"
   },
   "ETH": {
     "country_name": "Ethiopia",
@@ -251,11 +317,35 @@
     "iso2": "ET",
     "iso3": "ETH"
   },
+  "FIN": {
+    "country_name": "Finland",
+    "currency_code": "eur",
+    "iso2": "FI",
+    "iso3": "FIN"
+  },
   "FJI": {
     "country_name": "Fiji",
     "currency_code": "fjd",
     "iso2": "FJ",
     "iso3": "FJI"
+  },
+  "FLK": {
+    "country_name": "Falkland Islands",
+    "currency_code": "fkp",
+    "iso2": "FK",
+    "iso3": "FLK"
+  },
+  "FRA": {
+    "country_name": "France",
+    "currency_code": "eur",
+    "iso2": "FR",
+    "iso3": "FRA"
+  },
+  "GAB": {
+    "country_name": "Gabon",
+    "currency_code": "xaf",
+    "iso2": "GA",
+    "iso3": "GAB"
   },
   "GBR": {
     "country_name": "United Kingdom",
@@ -287,6 +377,12 @@
     "iso2": "GM",
     "iso3": "GMB"
   },
+  "GRC": {
+    "country_name": "Greece",
+    "currency_code": "eur",
+    "iso2": "GR",
+    "iso3": "GRC"
+  },
   "GTM": {
     "country_name": "Guatemala",
     "currency_code": "gtq",
@@ -300,7 +396,7 @@
     "iso3": "GUY"
   },
   "HKG": {
-    "country_name": "Honk Kong",
+    "country_name": "Hong Kong",
     "currency_code": "hkd",
     "iso2": "HK",
     "iso3": "HKG"
@@ -310,6 +406,12 @@
     "currency_code": "hnl",
     "iso2": "HN",
     "iso3": "HND"
+  },
+  "HRV": {
+    "country_name": "Croatia",
+    "currency_code": "eur",
+    "iso2": "HR",
+    "iso3": "HRV"
   },
   "HTI": {
     "country_name": "Haiti",
@@ -335,6 +437,12 @@
     "iso2": "IN",
     "iso3": "IND"
   },
+  "IRL": {
+    "country_name": "Ireland",
+    "currency_code": "eur",
+    "iso2": "IE",
+    "iso3": "IRL"
+  },
   "ISL": {
     "country_name": "Iceland",
     "currency_code": "isk",
@@ -346,6 +454,12 @@
     "currency_code": "ils",
     "iso2": "IL",
     "iso3": "ISR"
+  },
+  "ITA": {
+    "country_name": "Italy",
+    "currency_code": "eur",
+    "iso2": "IT",
+    "iso3": "ITA"
   },
   "JAM": {
     "country_name": "Jamaica",
@@ -407,6 +521,18 @@
     "iso2": "LR",
     "iso3": "LBR"
   },
+  "LCA": {
+    "country_name": "Saint Lucia",
+    "currency_code": "xcd",
+    "iso2": "LC",
+    "iso3": "LCA"
+  },
+  "LIE": {
+    "country_name": "Liechtenstein",
+    "currency_code": "chf",
+    "iso2": "LI",
+    "iso3": "LIE"
+  },
   "LKA": {
     "country_name": "Sri Lanka",
     "currency_code": "lkr",
@@ -419,6 +545,24 @@
     "iso2": "LS",
     "iso3": "LSO"
   },
+  "LTU": {
+    "country_name": "Lithuania",
+    "currency_code": "eur",
+    "iso2": "LT",
+    "iso3": "LTU"
+  },
+  "LUX": {
+    "country_name": "Luxembourg",
+    "currency_code": "eur",
+    "iso2": "LU",
+    "iso3": "LUX"
+  },
+  "LVA": {
+    "country_name": "Latvia",
+    "currency_code": "eur",
+    "iso2": "LV",
+    "iso3": "LVA"
+  },
   "MAC": {
     "country_name": "Macao SAR, China",
     "currency_code": "mop",
@@ -430,6 +574,12 @@
     "currency_code": "mad",
     "iso2": "MA",
     "iso3": "MAR"
+  },
+  "MCO": {
+    "country_name": "Monaco",
+    "currency_code": "eur",
+    "iso2": "MC",
+    "iso3": "MCO"
   },
   "MDA": {
     "country_name": "Moldova",
@@ -461,11 +611,23 @@
     "iso2": "MK",
     "iso3": "MKD"
   },
+  "MLT": {
+    "country_name": "Malta",
+    "currency_code": "eur",
+    "iso2": "MT",
+    "iso3": "MLT"
+  },
   "MMR": {
     "country_name": "Myanmar",
     "currency_code": "mmk",
     "iso2": "MM",
     "iso3": "MMR"
+  },
+  "MNE": {
+    "country_name": "Montenegro",
+    "currency_code": "eur",
+    "iso2": "ME",
+    "iso3": "MNE"
   },
   "MNG": {
     "country_name": "Mongolia",
@@ -478,12 +640,6 @@
     "currency_code": "mzn",
     "iso2": "MZ",
     "iso3": "MOZ"
-  },
-  "MRT": {
-    "country_name": "Mauritania",
-    "currency_code": "mro",
-    "iso2": "MR",
-    "iso3": "MRT"
   },
   "MUS": {
     "country_name": "Mauritius",
@@ -509,6 +665,12 @@
     "iso2": "NA",
     "iso3": "NAM"
   },
+  "NER": {
+    "country_name": "Niger",
+    "currency_code": "xof",
+    "iso2": "NE",
+    "iso3": "NER"
+  },
   "NGA": {
     "country_name": "Nigeria",
     "currency_code": "ngn",
@@ -520,6 +682,12 @@
     "currency_code": "nio",
     "iso2": "NI",
     "iso3": "NIC"
+  },
+  "NLD": {
+    "country_name": "Netherlands",
+    "currency_code": "eur",
+    "iso2": "NL",
+    "iso3": "NLD"
   },
   "NOR": {
     "country_name": "Norway",
@@ -575,6 +743,12 @@
     "iso2": "PL",
     "iso3": "POL"
   },
+  "PRT": {
+    "country_name": "Portugal",
+    "currency_code": "eur",
+    "iso2": "PT",
+    "iso3": "PRT"
+  },
   "PRY": {
     "country_name": "Paraguay",
     "currency_code": "pyg",
@@ -617,6 +791,12 @@
     "iso2": "SA",
     "iso3": "SAU"
   },
+  "SEN": {
+    "country_name": "Senegal",
+    "currency_code": "xof",
+    "iso2": "SN",
+    "iso3": "SEN"
+  },
   "SGP": {
     "country_name": "Singapore",
     "currency_code": "sgd",
@@ -637,9 +817,21 @@
   },
   "SLE": {
     "country_name": "Sierra Leone",
-    "currency_code": "sll",
+    "currency_code": "sle",
     "iso2": "SL",
     "iso3": "SLE"
+  },
+  "SLV": {
+    "country_name": "El Salvador",
+    "currency_code": "usd",
+    "iso2": "SV",
+    "iso3": "SLV"
+  },
+  "SMR": {
+    "country_name": "San Marino",
+    "currency_code": "eur",
+    "iso2": "SM",
+    "iso3": "SMR"
   },
   "SOM": {
     "country_name": "Somalia",
@@ -665,6 +857,18 @@
     "iso2": "SR",
     "iso3": "SUR"
   },
+  "SVK": {
+    "country_name": "Slovakia",
+    "currency_code": "eur",
+    "iso2": "SK",
+    "iso3": "SVK"
+  },
+  "SVN": {
+    "country_name": "Slovenia",
+    "currency_code": "eur",
+    "iso2": "SI",
+    "iso3": "SVN"
+  },
   "SWE": {
     "country_name": "Sweden",
     "currency_code": "sek",
@@ -676,6 +880,12 @@
     "currency_code": "szl",
     "iso2": "SZ",
     "iso3": "SWZ"
+  },
+  "SXM": {
+    "country_name": "Sint Maarten",
+    "currency_code": "xcg",
+    "iso2": "SX",
+    "iso3": "SXM"
   },
   "SYC": {
     "country_name": "Seychelles",
@@ -754,6 +964,12 @@
     "currency_code": "uzs",
     "iso2": "UZ",
     "iso3": "UZB"
+  },
+  "VAT": {
+    "country_name": "Vatican City",
+    "currency_code": "eur",
+    "iso2": "VA",
+    "iso3": "VAT"
   },
   "VNM": {
     "country_name": "Vietnam",

@@ -140,6 +140,16 @@ a:hover {
   color: var(--ink-soft);
 }
 
+.support-note {
+  margin: -8px 0 24px;
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+}
+
+.support-note strong {
+  color: var(--ink);
+}
+
 .controls {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
